@@ -4,20 +4,22 @@
 <head>
   <meta charset="utf-8" />
   <title>Silk4me</title>
+  <meta name="robots" content="noindex" />
   <script>
     (function () {
+      var base = "/silk4me/";
       var path = window.location.pathname;
 
-      // Если это запрос к файлу (есть расширение) — НИЧЕГО НЕ ДЕЛАЕМ
-      // Примеры: .xml .txt .ico .png .webmanifest .css .js
-      if (/\.[a-zA-Z0-9]+$/.test(path)) {
-        return;
-      }
+      // Если запрос НЕ в пределах /silk4me/ — ничего не делаем
+      if (!path.startsWith(base)) return;
 
-      // SPA redirect только для роутов
-      if (path.startsWith('/silk4me/')) {
-        window.location.replace('/silk4me/');
-      }
+      // Если это файл (есть расширение) — не редиректим
+      // Сработает для: .xml .txt .ico .png .webmanifest .css .js .map и т.д.
+      var last = path.split("/").pop() || "";
+      if (last.includes(".") && !last.endsWith(".")) return;
+
+      // SPA: редиректим на корень приложения
+      if (path !== base) window.location.replace(base);
     })();
   </script>
 </head>
