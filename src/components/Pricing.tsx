@@ -1,6 +1,5 @@
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import silkPillow from "@/assets/SILK4ME (362).jpg";
 
 const features = [
   "Upcycled silk from reclaimed neckties",
@@ -15,6 +14,9 @@ const Pricing = () => {
   const scrollToContact = () => {
     document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
   };
+
+  // картинка из public (работает и локально, и на GitHub Pages)
+  const featuredImg = `${import.meta.env.BASE_URL}SILK4ME%20(362).jpg`;
 
   return (
     <section id="pricing" className="py-24 bg-background">
@@ -66,11 +68,13 @@ const Pricing = () => {
             <div className="bg-card border border-border/50 p-8">
               <div className="bg-background p-8 mb-6">
                 <img
-                  src={silkPillow}
+                  src={featuredImg}
                   alt="Re:SILK — upcycled silk accessory"
                   className="w-full h-[300px] object-contain"
+                  draggable={false}
                 />
               </div>
+
               <div className="text-center space-y-4">
                 <p className="text-sm text-muted-foreground uppercase tracking-wider">
                   Featured piece

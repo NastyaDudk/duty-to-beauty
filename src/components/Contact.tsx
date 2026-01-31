@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Send, MapPin, Instagram, Mail } from "lucide-react";
-import silkLifestyle from "@/assets/silk-lifestyle.jpg";
 
 // Local -> localhost, Production -> Render
 const DEFAULT_API = import.meta.env.DEV
@@ -91,6 +90,9 @@ const Contact = () => {
   };
 
   const email = "Silkandnature" + "@gmail.com";
+
+  // image from public (works locally + GitHub Pages)
+  const lifestyleImg = `${import.meta.env.BASE_URL}silk-lifestyle.jpg`;
 
   return (
     <section id="contact" className="py-24 bg-silk-charcoal">
@@ -197,11 +199,11 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* RIGHT: Image — unchanged */}
+          {/* RIGHT: Image */}
           <div className="relative hidden lg:block">
             <div className="absolute -inset-4 border border-gold/20" />
             <img
-              src={silkLifestyle}
+              src={lifestyleImg}
               alt="Silk4me lifestyle"
               className="w-full h-[560px] object-cover object-center"
               draggable={false}
@@ -214,5 +216,3 @@ const Contact = () => {
 };
 
 export default Contact;
-
-

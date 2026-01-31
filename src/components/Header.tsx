@@ -1,10 +1,5 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-<img
-  src={`${import.meta.env.BASE_URL}logo.png`}
-  alt="Silk4me logo"
-  className="h-8 w-8 object-contain"
-/>
 
 type NavItem = {
   label: string;
@@ -58,6 +53,9 @@ const Header = () => {
   const linkClass =
     "text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors duration-300";
 
+  // ✅ logo.png должен лежать в /public/logo.png
+  const logoSrc = `${import.meta.env.BASE_URL}logo.png`;
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-black/10">
       <div className="container mx-auto px-6 py-4">
@@ -70,9 +68,10 @@ const Header = () => {
             aria-label="Get a consultation"
           >
             <img
-              src={logo}
+              src={logoSrc}
               alt="Silk4me logo"
               className="h-8 w-8 object-contain transition-opacity group-hover:opacity-80"
+              draggable={false}
             />
             <span className="text-2xl font-serif tracking-[0.3em] text-foreground">
               SILK<span className="text-primary">4</span>ME
