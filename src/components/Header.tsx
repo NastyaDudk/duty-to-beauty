@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import logo from "@/assets/logo.png";
+<img
+  src={`${import.meta.env.BASE_URL}logo.png`}
+  alt="Silk4me logo"
+  className="h-8 w-8 object-contain"
+/>
 
 type NavItem = {
   label: string;

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import silkModel from "@/assets/silk-model.jpg";
+
 
 const COLLECTION_URL = "https://silk4.me/ua/shop_ua/resilk_sleep_mask__scrunchie_ua/";
 const PAJAMA_URL = "https://silk4.me/ua/shop_ua/resilk_sleep_mask__scrunchie_ua/";
