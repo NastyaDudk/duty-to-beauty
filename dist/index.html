@@ -5,7 +5,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Re:SILK — Silk4me</title>
-  <script type="module" crossorigin src="/duty-to-beauty/assets/index-905yLz15.js"></script>
+
+    <script>
+        (function () {
+            const params = new URLSearchParams(window.location.search);
+            const redirect = params.get("redirect");
+            if (redirect) {
+                window.history.replaceState(null, "", redirect);
+            }
+        })();
+    </script>
+  <script type="module" crossorigin src="/duty-to-beauty/assets/index-Dumwqiuu.js"></script>
   <link rel="stylesheet" crossorigin href="/duty-to-beauty/assets/index-C9PkATUM.css">
 </head>
 
