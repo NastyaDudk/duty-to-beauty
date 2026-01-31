@@ -3,23 +3,27 @@ import { Sparkles, Wind, Crown, Shield } from "lucide-react";
 const benefits = [
   {
     icon: Sparkles,
-    title: "Неймовірна м'якість",
-    description: "Шовк ніжно огортає шкіру, забезпечуючи відчуття преміальності та комфорту протягом усієї ночі.",
+    title: "Exceptional softness",
+    description:
+      "Natural silk feels incredibly gentle on the skin, offering a sense of comfort and refined luxury with every wear.",
   },
   {
     icon: Wind,
-    title: "Дихаюча тканина",
-    description: "Натуральні волокна забезпечують ідеальну терморегуляцію — прохолодно влітку, тепло взимку.",
+    title: "Breathable & lightweight",
+    description:
+      "Silk’s natural fibers allow the skin to breathe, helping maintain comfort in different temperatures throughout the day.",
   },
   {
     icon: Crown,
-    title: "Преміальний вигляд",
-    description: "Благородний блиск та елегантні складки чорного шовку створюють атмосферу справжньої вишуканості.",
+    title: "Timeless elegance",
+    description:
+      "The subtle sheen and fluid texture of silk create a refined, understated look that never goes out of style.",
   },
   {
     icon: Shield,
-    title: "Довговічність",
-    description: "При правильному догляді шовкові вироби зберігають свою красу та властивості роками.",
+    title: "Made to last",
+    description:
+      "With proper care, silk accessories retain their beauty and quality over time — a conscious alternative to disposable fashion.",
   },
 ];
 
@@ -28,9 +32,11 @@ const Benefits = () => {
     <section id="collection" className="py-24 bg-background">
       <div className="container mx-auto px-6">
         <div className="text-center space-y-4 mb-16">
-          <p className="text-primary uppercase tracking-[0.3em] text-sm">Переваги</p>
+          <p className="text-primary uppercase tracking-[0.3em] text-sm">
+            Benefits
+          </p>
           <h2 className="text-3xl md:text-4xl font-serif font-light text-foreground">
-            Чому обирають <span className="text-primary">натуральний шовк</span>
+            Why choose <span className="text-primary">natural silk</span>
           </h2>
         </div>
 
@@ -41,8 +47,8 @@ const Benefits = () => {
               className="group p-8 bg-card border border-border/50 hover:border-gold/50 transition-all duration-500"
             >
               <div className="mb-6">
-                <benefit.icon 
-                  className="w-10 h-10 text-primary group-hover:text-gold group-hover:scale-110 transition-all duration-300" 
+                <benefit.icon
+                  className="w-10 h-10 text-primary group-hover:text-gold group-hover:scale-110 transition-all duration-300"
                   strokeWidth={1.5}
                 />
               </div>

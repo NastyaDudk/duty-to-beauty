@@ -6,13 +6,8 @@ import { toast } from "sonner";
 import { Send, MapPin, Instagram, Mail } from "lucide-react";
 import silkLifestyle from "@/assets/silk-lifestyle.jpg";
 
-// Локально -> localhost, в проде -> Render
-const isLocal =
-  typeof window !== "undefined" &&
-  (window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1");
-
-const DEFAULT_API = isLocal
+// Local -> localhost, Production -> Render
+const DEFAULT_API = import.meta.env.DEV
   ? "http://localhost:5050/api/lead"
   : "https://silk4me.onrender.com/api/lead";
 
@@ -48,7 +43,7 @@ const Contact = () => {
     const message = formData.message.trim();
 
     if (!name || !phone) {
-      toast.error("Будь ласка, заповніть ім’я та телефон.");
+      toast.error("Please fill in your name and phone number.");
       return;
     }
 
@@ -67,7 +62,7 @@ const Contact = () => {
         body: JSON.stringify(payload),
       });
 
-      // Render/сервер иногда возвращает не-JSON на ошибках — читаем безопасно
+      // Server may return non-JSON on errors — read safely
       const raw = await res.text().catch(() => "");
       let data: ApiResponse | null = null;
 
@@ -81,21 +76,21 @@ const Contact = () => {
 
       if (!ok) {
         console.error("Lead submit error:", res.status, raw);
-        toast.error("Не вдалося надіслати запит. Спробуйте ще раз.");
+        toast.error("Couldn’t send your request. Please try again.");
         return;
       }
 
-      toast.success("✅ Запит надіслано! Ми звʼяжемося з вами найближчим часом.");
+      toast.success("✅ Sent! We’ll get back to you shortly.");
       setFormData({ name: "", phone: "", message: "" });
     } catch (err) {
       console.error(err);
-      toast.error("Помилка з’єднання. Перевірте сервер або Render.");
+      toast.error("Connection error. Please check the server / Render.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const email = "Silkandnature" + "@gmail.com"; // чуть меньше спама, чем явный mailto
+  const email = "Silkandnature" + "@gmail.com";
 
   return (
     <section id="contact" className="py-24 bg-silk-charcoal">
@@ -105,20 +100,19 @@ const Contact = () => {
           <div className="flex flex-col justify-between h-full space-y-8">
             <div className="space-y-4">
               <p className="text-gold uppercase tracking-[0.3em] text-sm">
-                Контакти
+                Contact
               </p>
 
               <h2 className="text-3xl md:text-4xl font-serif font-light text-background">
-                Отримайте{" "}
-                <span className="text-gold">персональну консультацію</span>
+                Get a <span className="text-gold">personal consultation</span>
               </h2>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Имя + телефон */}
+              {/* Name + phone */}
               <div className="grid md:grid-cols-2 gap-4">
                 <Input
-                  placeholder="Ваше ім'я"
+                  placeholder="Your name"
                   value={formData.name}
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, name: e.target.value }))
@@ -130,7 +124,7 @@ const Contact = () => {
                 <Input
                   type="tel"
                   inputMode="tel"
-                  placeholder="Телефон"
+                  placeholder="Phone number"
                   value={formData.phone}
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, phone: e.target.value }))
@@ -140,10 +134,9 @@ const Contact = () => {
                 />
               </div>
 
-              {/* Отступ перед текстовым полем */}
               <div className="pt-4">
                 <Textarea
-                  placeholder="Ваше повідомлення (необов'язково)"
+                  placeholder="Your message (optional)"
                   value={formData.message}
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, message: e.target.value }))
@@ -152,7 +145,6 @@ const Contact = () => {
                 />
               </div>
 
-              {/* Отступ перед кнопкой */}
               <div className="pt-4">
                 <Button
                   type="submit"
@@ -161,20 +153,19 @@ const Contact = () => {
                   className="w-full md:w-auto bg-gold text-accent-foreground hover:bg-gold-light border-gold hover:border-gold-light"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Надсилання..." : "Надіслати запит"}
+                  {isSubmitting ? "Sending..." : "Send request"}
                   <Send className="w-4 h-4 ml-2" />
                 </Button>
               </div>
             </form>
 
-            {/* Contact Info (mobile center, desktop normal) */}
+            {/* Contact Info */}
             <div
               className="
                 flex flex-col items-center text-center gap-6 pt-8
                 md:flex-row md:flex-wrap md:items-center md:text-left md:gap-10
               "
             >
-              {/* Instagram */}
               <a
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
@@ -183,37 +174,35 @@ const Contact = () => {
               >
                 <Instagram className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
                 <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
-                  Написати в Instagram
+                  Message us on Instagram
                 </span>
               </a>
 
-              {/* Email */}
               <a
                 href={`mailto:${email}`}
                 className="flex items-center gap-3 group cursor-pointer"
               >
                 <Mail className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
                 <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
-                  Написати на пошту
+                  Email us
                 </span>
               </a>
 
-              {/* Location — не кликабельно */}
               <div className="flex items-center gap-3 cursor-default">
                 <MapPin className="w-5 h-5 text-gold" />
                 <span className="text-sm text-background/80">
-                  Україна / Європа
+                  Ukraine / Europe
                 </span>
               </div>
             </div>
           </div>
 
-          {/* RIGHT: Image — НЕ ТРОГАЕМ */}
+          {/* RIGHT: Image — unchanged */}
           <div className="relative hidden lg:block">
             <div className="absolute -inset-4 border border-gold/20" />
             <img
               src={silkLifestyle}
-              alt="Silk4me Lifestyle"
+              alt="Silk4me lifestyle"
               className="w-full h-[560px] object-cover object-center"
               draggable={false}
             />

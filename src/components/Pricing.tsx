@@ -3,12 +3,12 @@ import { Button } from "@/components/ui/button";
 import silkPillow from "@/assets/SILK4ME (362).jpg";
 
 const features = [
-  "100% натуральний шовк Mulberry",
-  "Щільність 22 momme — преміум клас",
-  "Гіпоалергенний та антибактеріальний",
-  "Терморегуляція для комфортного сну",
-  "Зберігає вологу шкіри та волосся",
-  "Елегантна подарункова упаковка",
+  "Upcycled silk from reclaimed neckties",
+  "Soft, breathable feel for nightly comfort",
+  "Gentle on skin and hair",
+  "Comfortable elastic strap (no hard ties)",
+  "Each piece is one of a kind",
+  "Limited drop — made in small batches",
 ];
 
 const Pricing = () => {
@@ -23,15 +23,20 @@ const Pricing = () => {
           {/* Content */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <p className="text-primary uppercase tracking-[0.3em] text-sm">Ціни</p>
+              <p className="text-primary uppercase tracking-[0.3em] text-sm">
+                Details
+              </p>
               <h2 className="text-3xl md:text-4xl font-serif font-light text-foreground">
-                Інвестиція в <span className="text-primary">якість та преміум</span>
+                A small-batch drop built on{" "}
+                <span className="text-primary">craft + reuse</span>
               </h2>
             </div>
 
             <p className="text-muted-foreground leading-relaxed">
-              Ми не пропонуємо дешевих товарів. Silk4me — це преміум-бренд для тих, 
-              хто цінує справжню якість та готовий інвестувати в свій комфорт і красу.
+              Re:SILK isn’t mass-produced. Each mask is made from reclaimed silk
+              neckties, then carefully reworked into a comfortable sleep piece
+              with a soft elastic strap. Limited by the fabrics we can source —
+              and that’s exactly the point.
             </p>
 
             <ul className="space-y-4">
@@ -47,11 +52,11 @@ const Pricing = () => {
 
             <div className="pt-4">
               <p className="text-sm text-muted-foreground mb-4">
-                Ціни залежать від розміру та комплектації. Отримайте персональну консультацію 
-                для підбору ідеального варіанту.
+                Pricing depends on the specific fabric, finishing, and edition.
+                Message us to get availability and the current price.
               </p>
               <Button variant="luxury" size="lg" onClick={scrollToContact}>
-                Дізнатися ціну
+                Ask for availability
               </Button>
             </div>
           </div>
@@ -62,18 +67,26 @@ const Pricing = () => {
               <div className="bg-background p-8 mb-6">
                 <img
                   src={silkPillow}
-                  alt="Silk4me silkPillow"
+                  alt="Re:SILK — upcycled silk accessory"
                   className="w-full h-[300px] object-contain"
                 />
               </div>
               <div className="text-center space-y-4">
-                <p className="text-sm text-muted-foreground uppercase tracking-wider">Популярний вибір</p>
-                <h3 className="text-2xl font-serif text-foreground">Шовкова наволочка</h3>
+                <p className="text-sm text-muted-foreground uppercase tracking-wider">
+                  Featured piece
+                </p>
+                <h3 className="text-2xl font-serif text-foreground">
+                  Re:SILK Sleep Mask
+                </h3>
                 <p className="text-muted-foreground text-sm">
-                Бестселер бренду. Аксесуар, що дозволяє відчути користь шовку як для шкіри, так і для волосся без зусиль. Ідеальний подарунок для себе чи близьких.
+                  A sleep essential made from reclaimed silk neckties. Soft,
+                  comfortable, and designed to feel gentle on skin and hair —
+                  with a flexible elastic strap for an easy fit.
                 </p>
                 <div className="pt-4 border-t border-border/50">
-                  <p className="text-primary font-serif text-xl">Преміум ціновий сегмент</p>
+                  <p className="text-primary font-serif text-xl">
+                    Limited small-batch drop
+                  </p>
                 </div>
               </div>
             </div>

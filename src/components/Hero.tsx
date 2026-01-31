@@ -1,9 +1,8 @@
 import { Button } from "@/components/ui/button";
 import silkModel from "@/assets/silk-model.jpg";
 
-const COLLECTION_URL = "https://silk4.me/product-category/blck_collection/";
-const PAJAMA_URL = "https://silk4.me/shop_ua/silk_set_blck_ua/";
-const PROMO_CODE = "BLCK-15";
+const COLLECTION_URL = "https://silk4.me/ua/shop_ua/resilk_sleep_mask__scrunchie_ua/";
+const PAJAMA_URL = "https://silk4.me/ua/shop_ua/resilk_sleep_mask__scrunchie_ua/";
 
 const Hero = () => {
   const scrollToContact = () => {
@@ -36,23 +35,28 @@ const Hero = () => {
                 type="button"
                 onClick={goToCollection}
                 className="text-left group"
-                aria-label="Перейти до Black Collection"
+                aria-label="Go to Re:SILK collection"
               >
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-medium text-foreground group-hover:text-primary transition-colors">
-                  BLCK Kолекція
+                  Re:SILK
                 </h1>
               </button>
             </div>
 
             <p className="text-muted-foreground text-xl leading-relaxed max-w-xl whitespace-pre-line">
-              {`Основа твоєї молодості і краси без зусиль.
-Основа здорового сну.
-Основа моменту «нарешті для себе».
+{`Re:SILK is a new chapter of silk.
 
-Коли чорний заспокоює, а шовк піклується.`}
+A collection of sleep masks with elastic straps,
+crafted from reclaimed silk neckties.
+
+Each piece is one of a kind —
+carefully reworked to support your sleep,
+your skin, and your hair.
+
+Upcycled. Thoughtful. Limited.`}
             </p>
 
-            {/* PROMO — mobile centered, desktop left */}
+            {/* INFO — mobile centered, desktop left */}
             <div
               className="
                 mt-6 flex flex-col items-center text-center gap-3
@@ -60,7 +64,7 @@ const Hero = () => {
               "
             >
               <span className="text-sm tracking-[0.25em] uppercase text-foreground">
-                Знижка за промокодом
+                New collection
               </span>
 
               <span
@@ -74,7 +78,7 @@ const Hero = () => {
                   text-primary
                 "
               >
-                {PROMO_CODE}
+                Upcycled neckties
               </span>
             </div>
 
@@ -91,7 +95,7 @@ const Hero = () => {
                 onClick={scrollToContact}
                 className="w-full max-w-[320px] text-center sm:w-[320px]"
               >
-                Отримати консультацію
+                Learn more
               </Button>
 
               <Button
@@ -100,7 +104,7 @@ const Hero = () => {
                 onClick={goToCollection}
                 className="w-full max-w-[320px] text-center sm:w-[320px]"
               >
-                Переглянути колекцію
+                View Re:SILK pieces
               </Button>
             </div>
 
@@ -109,48 +113,41 @@ const Hero = () => {
               <div className="text-center">
                 <div className="text-4xl font-medium text-foreground">100%</div>
                 <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
-                  натуральний шовк
+                  reclaimed silk
                 </p>
               </div>
 
               <div className="text-center">
-                <div className="text-4xl font-medium text-foreground">6A</div>
+                <div className="text-4xl font-medium text-foreground">1/1</div>
                 <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
-                  найвища якість
+                  one of a kind
                 </p>
               </div>
 
               <div className="text-center">
-                <div className="text-4xl font-medium text-foreground">22</div>
+                <div className="text-4xl font-medium text-foreground">Re</div>
                 <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
-                  momme
+                  reworked + refined
                 </p>
               </div>
             </div>
 
-            {/* SEO block: невидимо для пользователя, читабельно для Google/скринридеров */}
+            {/* SEO block: invisible to user, readable for Google/screen readers */}
             <div className="sr-only">
-              <h2>Black Collection Silk4me — вироби з натурального шовку Mulberry 6A</h2>
+              <h2>Re:SILK by Silk4me — upcycled silk sleep masks made from reclaimed neckties</h2>
 
               <p>
-                Black Collection від Silk4me включає: рушник для обличчя, шовковий твістер,
-                шовкові резинки (максі, міді, міні), шовкову майку, шовкові шорти,
-                шовкову маску для сну, тюрбан із шовку, шовкову наволочку та шовкову піжаму.
+                Re:SILK is a limited collection of sleep masks with elastic straps,
+                created from reclaimed silk neckties. Each piece is unique and upcycled.
               </p>
 
-              <h3>Чорна шовкова піжама Silk4me</h3>
+              <h3>Re:SILK sleep mask with scrunchie strap</h3>
               <p>
-                Чорна шовкова піжама Silk4me виготовлена з натурального шовку Mulberry 6A.
-                Піжама входить до Black Collection та підходить для щоденного сну.
-              </p>
-
-              <p>
-                22 momme — це показник щільності шовку (мом), який впливає на зносостійкість
-                та відчуття тканини під час сну.
+                Soft on skin and gentle for hair, the Re:SILK sleep mask is designed for comfortable sleep and a mindful routine.
               </p>
 
               <p>
-                Перейдіть до повної колекції за посиланням: https://silk4.me/product-category/blck_collection/
+                Explore Re:SILK here: https://silk4.me/ua/shop_ua/resilk_sleep_mask__scrunchie_ua/
               </p>
             </div>
           </div>
@@ -162,7 +159,7 @@ const Hero = () => {
             <div className="relative overflow-hidden">
               <img
                 src={silkModel}
-                alt="Silk4me Black Collection"
+                alt="Re:SILK — upcycled silk sleep masks"
                 className="w-full h-[600px] object-cover object-top"
                 draggable={false}
               />
@@ -186,13 +183,13 @@ const Hero = () => {
                 style={{ animation: "badge-float 3.6s ease-in-out infinite" }}
               >
                 <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-2 text-center">
-                  Хіт продажу
+                  New drop
                 </p>
                 <p className="text-lg font-serif text-foreground">
-                  Шовкова піжама Black Edition
+                  Re:SILK sleep mask
                 </p>
                 <p className="mt-2 text-xs underline underline-offset-4 text-muted-foreground">
-                  Перейти до товару
+                  Open product page
                 </p>
               </a>
             </div>

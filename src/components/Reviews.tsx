@@ -1,39 +1,48 @@
-import { Star, Quote } from "lucide-react";
+import { Star } from "lucide-react";
 
 const reviews = [
   {
-    name: "Олена К.",
-    role: "Дизайнерка інтер'єрів",
-    text: "Шовковий тюрбан — це реальна інвестиція в якість мого волосся. Волосся помітно менше ламається і не таке зневоднене, як після махрових рушників",
-    rating: 4.8,
+    name: "Emily R.",
+    role: "Creative Director",
+    text: "Re:SILK feels thoughtful and intentional. The silk is beautiful, but what really matters to me is the idea behind it — giving premium materials a second life.",
+    rating: 4.9,
   },
   {
-    name: "Марія В.",
-    role: "Бізнес-консультантка",
-    text: "Після переходу на шовкові наволочки забула про зім'яте обличчя вранці. Шкіра та волосся виглядають набагато краще!",
-    rating: 4.6,
+    name: "Sophie M.",
+    role: "Fashion Buyer",
+    text: "I love that no two pieces are the same. The mask is soft, comfortable, and the elastic strap is very gentle. It feels like something personal, not mass-produced.",
+    rating: 4.7,
   },
   {
-    name: "Анна Л.",
-    role: "Лікар-дерматолог",
-    text: "Як спеціаліст рекомендую шовк своїм пацієнтам. Гіпоалергенний, не дратує шкіру, зберігає вологу.",
+    name: "Laura H.",
+    role: "Wellness Consultant",
+    text: "I’m very sensitive to fabrics, especially around my face. Re:SILK works perfectly for me — breathable, smooth, and without irritation.",
     rating: 5,
   },
 ];
 
 const trustItems = [
-  { title: "Висока якість", text: "100% натуральний шовк, Mulberry 6A Grade, добірна сировина" },
-  { title: "Швидка доставка", text: "Швидка доставка. Відправка по Україні та Європі. Фірмове пакування кожного замовлення" },
-  { title: "Дбайлива підтримка", text: "Дбайлива підтримка. Ми поруч, щоб допомогти зробити найкращий вибір для Вас" },
+  {
+    title: "Upcycled materials",
+    text: "Created from reclaimed silk neckties. Each piece carries a unique pattern and history.",
+  },
+  {
+    title: "Limited drops",
+    text: "Small-batch production based on available vintage silk. No overproduction, no waste.",
+  },
+  {
+    title: "Designed with care",
+    text: "Thoughtfully redesigned, cleaned, and finished to feel comfortable and refined.",
+  },
 ];
 
 function Stars({ rating }: { rating: number }) {
   const full = Math.floor(rating);
-  const hasHalf = rating - full >= 0.4 && rating - full < 0.9; // “половинка”
+  const hasHalf = rating - full >= 0.4 && rating - full < 0.9;
   const empty = 5 - full - (hasHalf ? 1 : 0);
 
   return (
-    <div className="flex items-center gap-1" aria-label={`Рейтинг ${rating} з 5`}>
+    <div className="flex items-center gap-1" aria-label={`Rating ${rating} out of 5`}>
       {Array.from({ length: full }).map((_, i) => (
         <Star key={`f-${i}`} className="h-4 w-4 fill-primary text-primary" />
       ))}
@@ -79,7 +88,7 @@ const Reviews = () => {
           ))}
         </div>
 
-        {/* Вместо сомнительных цифр */}
+        {/* Trust section */}
         <div className="mt-14 grid md:grid-cols-3 gap-8 text-center">
           {trustItems.map((it) => (
             <div key={it.title} className="px-4">

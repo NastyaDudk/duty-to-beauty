@@ -12,15 +12,15 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems: NavItem[] = [
-    { label: "Про нас", href: "#about" },
+    { label: "About", href: "#about" },
     {
-      label: "Black Collection",
-      href: "https://silk4.me/product-category/blck_collection/",
+      label: "re:silk Collection",
+      href: "https://silk4.me/ua/shop_ua/resilk_sleep_mask__scrunchie_ua/",
       external: true,
     },
-    { label: "Ціни", href: "#pricing" },
-    { label: "Відгуки", href: "#reviews" },
-    { label: "Контакти", href: "#contact" },
+    { label: "Pricing", href: "#pricing" },
+    { label: "Reviews", href: "#reviews" },
+    { label: "Contact", href: "#contact" },
   ];
 
   const closeMenu = () => setIsOpen(false);
@@ -32,21 +32,18 @@ const Header = () => {
         ? /^https?:\/\//i.test(href)
         : !!itemOrHref.external || /^https?:\/\//i.test(href);
 
-    // внешняя ссылка
     if (isExternal) {
       window.open(href, "_blank", "noopener,noreferrer");
       closeMenu();
       return;
     }
 
-    // наверх
     if (href === "#") {
       window.scrollTo({ top: 0, behavior: "smooth" });
       closeMenu();
       return;
     }
 
-    // якорь
     if (href.startsWith("#")) {
       const el = document.querySelector(href);
       el?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -61,12 +58,12 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-black/10">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo + Brand (ведет к консультации) */}
+          {/* Logo → Contact */}
           <button
             type="button"
             onClick={() => go("#contact")}
             className="flex items-center gap-3 group"
-            aria-label="Отримати консультацію"
+            aria-label="Get a consultation"
           >
             <img
               src={logo}
@@ -78,7 +75,7 @@ const Header = () => {
             </span>
           </button>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
             {navItems.map((item) =>
               item.external ? (
@@ -104,7 +101,7 @@ const Header = () => {
             )}
           </nav>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Button */}
           <button
             type="button"
             className="md:hidden text-foreground"
@@ -116,7 +113,7 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Nav */}
         {isOpen && (
           <nav className="md:hidden pt-6 pb-4 border-t border-black/10 mt-4">
             <div className="flex flex-col gap-4">
