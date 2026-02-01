@@ -5,7 +5,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Send, MapPin, Instagram, Mail } from "lucide-react";
 
-
 // Local -> localhost, Production -> Render
 const DEFAULT_API = import.meta.env.DEV
   ? "http://localhost:5050/api/lead"
@@ -13,7 +12,6 @@ const DEFAULT_API = import.meta.env.DEV
 
 const API_URL = import.meta.env.VITE_API_URL || DEFAULT_API;
 
-// image from public (works locally + GitHub Pages)
 // IMPORTANT: case-sensitive on GitHub Pages!
 const lifestyleImg = `${import.meta.env.BASE_URL}color8.jpg`;
 
@@ -29,6 +27,9 @@ type ApiResponse = {
   success?: boolean;
   error?: string;
 };
+
+const SOURCE_TAG = "re:silk";
+const REQUEST_TIMEOUT_MS = 12000;
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -47,28 +48,42 @@ const Contact = () => {
     const phone = formData.phone.trim();
     const message = formData.message.trim();
 
+    // ✅ наша валидация (вместо browser required)
     if (!name || !phone) {
       toast.error("Please fill in your name and phone number.");
       return;
     }
 
+    // ✅ гарантируем, что в телеграме будет видно re:silk
+    // (даже если сервер игнорит поле source)
+    const messageWithSource = message
+      ? `[${SOURCE_TAG}] ${message}`
+      : `[${SOURCE_TAG}]`;
+
     const payload: LeadPayload = {
-  name,
-  phone,
-  ...(message ? { message } : {}),
-  source: "re:silk",
+      name,
+      phone,
+      message: messageWithSource,
+      source: SOURCE_TAG,
     };
 
     setIsSubmitting(true);
 
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
     try {
       const res = await fetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          // ✅ доп. канал на случай если сервер читает из хедера
+          "X-Lead-Source": SOURCE_TAG,
+        },
         body: JSON.stringify(payload),
+        signal: controller.signal,
       });
 
-      // Server may return non-JSON on errors — read safely
       const raw = await res.text().catch(() => "");
       let data: ApiResponse | null = null;
 
@@ -88,23 +103,20 @@ const Contact = () => {
 
       toast.success("✅ Sent! We’ll get back to you shortly.");
       setFormData({ name: "", phone: "", message: "" });
-    } catch (err) {
-      console.error(err);
-      toast.error("Connection error. Please check the server / Render.");
+    } catch (err: any) {
+      if (err?.name === "AbortError") {
+        toast.error("Request timed out. Please try again.");
+      } else {
+        console.error(err);
+        toast.error("Connection error. Please check the server / Render.");
+      }
     } finally {
+      window.clearTimeout(timer);
       setIsSubmitting(false);
     }
   };
 
   const email = "Silkandnature" + "@gmail.com";
-
-  // image from public (works locally + GitHub Pages)
-  <img
-  src={lifestyleImg}
-  alt="Re:SILK — silk sleep mask"
-  className="w-full h-[560px] object-cover object-center"
-  draggable={false}
-/>
 
   return (
     <section id="contact" className="py-24 bg-silk-charcoal">
@@ -122,8 +134,8 @@ const Contact = () => {
               </h2>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Name + phone */}
+            {/* ✅ noValidate отключает браузерные подсказки типа “Заполните поле” */}
+            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
               <div className="grid md:grid-cols-2 gap-4">
                 <Input
                   placeholder="Your name"
@@ -131,7 +143,6 @@ const Contact = () => {
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, name: e.target.value }))
                   }
-                  required
                   className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground h-12"
                 />
 
@@ -143,7 +154,6 @@ const Contact = () => {
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, phone: e.target.value }))
                   }
-                  required
                   className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground h-12"
                 />
               </div>
@@ -162,9 +172,7 @@ const Contact = () => {
               <div className="pt-4">
                 <Button
                   type="submit"
-                  variant="luxury"
-                  size="lg"
-                  className="w-full md:w-auto bg-gold text-accent-foreground hover:bg-gold-light border-gold hover:border-gold-light"
+                  className="w-full md:w-auto bg-gold text-accent-foreground hover:bg-gold-light border border-gold hover:border-gold-light"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Sending..." : "Send request"}
@@ -216,7 +224,7 @@ const Contact = () => {
             <div className="absolute -inset-4 border border-gold/20" />
             <img
               src={lifestyleImg}
-              alt="Silk4me lifestyle"
+              alt="Re:SILK — silk sleep mask"
               className="w-full h-[560px] object-cover object-center"
               draggable={false}
             />

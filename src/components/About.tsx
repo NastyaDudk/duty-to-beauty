@@ -57,7 +57,7 @@ const About = () => {
                   Mulberry silk
                 </p>
                 <p className="text-sm text-background/70">
-                  Reclaimed premium material
+                   Premium textile
                 </p>
               </div>
 

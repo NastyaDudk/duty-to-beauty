@@ -75,7 +75,7 @@ Upcycled. Thoughtful. Limited.`}
                   tracking-[0.3em] uppercase text-primary
                 "
               >
-                Upcycled neckties
+                Upcycled ties
               </span>
             </div>
 
@@ -100,7 +100,7 @@ Upcycled. Thoughtful. Limited.`}
                 onClick={goToCollection}
                 className="w-full max-w-[320px] sm:w-[320px]"
               >
-                View Re:SILK pieces
+                View Re:SILK
               </Button>
             </div>
 
@@ -108,7 +108,7 @@ Upcycled. Thoughtful. Limited.`}
               <div className="text-center">
                 <div className="text-4xl font-medium text-foreground">100%</div>
                 <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
-                  reclaimed silk
+                  Mulberry silk
                 </p>
               </div>
               <div className="text-center">
@@ -120,7 +120,7 @@ Upcycled. Thoughtful. Limited.`}
               <div className="text-center">
                 <div className="text-4xl font-medium text-foreground">Re</div>
                 <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
-                  reworked & refined
+                  Recycled
                 </p>
               </div>
             </div>
