@@ -1,95 +1,105 @@
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const features = [
-  "Upcycled silk from reclaimed neckties",
-  "Soft, breathable feel for nightly comfort",
-  "Gentle on skin and hair",
-  "Comfortable elastic strap (no hard ties)",
-  "Each piece is one of a kind",
-  "Limited drop — made in small batches",
+const priceFacts = [
+  "Price depends on the specific silk and finishing",
+  "Each mask is one of a kind (no repeats)",
+  "Handcrafted in small batches",
+  "Natural Mulberry silk from reclaimed neckties",
+  "Limited availability by materials",
 ];
 
 const Pricing = () => {
   const scrollToContact = () => {
-    document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+    document.querySelector("#contact")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   };
 
-  // картинка из public (работает и локально, и на GitHub Pages)
-  const featuredImg = `${import.meta.env.BASE_URL}SILK4ME%20(362).jpg`;
+  // image from public (GitHub Pages safe)
+  const featuredImg = `${import.meta.env.BASE_URL}color6.jpg`;
 
   return (
     <section id="pricing" className="py-24 bg-background">
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Content */}
+          {/* TEXT */}
           <div className="space-y-8">
             <div className="space-y-4">
               <p className="text-primary uppercase tracking-[0.3em] text-sm">
-                Details
+                Pricing
               </p>
+
               <h2 className="text-3xl md:text-4xl font-serif font-light text-foreground">
-                A small-batch drop built on{" "}
-                <span className="text-primary">craft + reuse</span>
+                Transparent pricing for a{" "}
+                <span className="text-primary">limited collection</span>
               </h2>
             </div>
 
-            <p className="text-muted-foreground leading-relaxed">
-              Re:SILK isn’t mass-produced. Each mask is made from reclaimed silk
-              neckties, then carefully reworked into a comfortable sleep piece
-              with a soft elastic strap. Limited by the fabrics we can source —
-              and that’s exactly the point.
+            <p className="text-muted-foreground leading-relaxed max-w-xl">
+              Re:SILK pieces are not mass-produced, so there is no single fixed
+              price. Each sleep mask is priced individually based on the silk
+              fabric, condition, detailing, and finishing.
+            </p>
+
+            <p className="text-muted-foreground leading-relaxed max-w-xl">
+              This approach keeps the collection honest, fair, and aligned with
+              its purpose — giving reclaimed silk a meaningful second life.
             </p>
 
             <ul className="space-y-4">
-              {features.map((feature, index) => (
-                <li key={index} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
+              {priceFacts.map((fact, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <div className="mt-1 w-5 h-5 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
                     <Check className="w-3 h-3 text-primary" />
                   </div>
-                  <span className="text-foreground">{feature}</span>
+                  <span className="text-foreground">{fact}</span>
                 </li>
               ))}
             </ul>
 
             <div className="pt-4">
               <p className="text-sm text-muted-foreground mb-4">
-                Pricing depends on the specific fabric, finishing, and edition.
-                Message us to get availability and the current price.
+                To check availability and receive the current price, please get
+                in touch with us directly.
               </p>
+
               <Button variant="luxury" size="lg" onClick={scrollToContact}>
-                Ask for availability
+                Ask for price & availability
               </Button>
             </div>
           </div>
 
-          {/* Image Card */}
+          {/* IMAGE */}
           <div className="relative">
             <div className="bg-card border border-border/50 p-8">
-              <div className="bg-background p-8 mb-6">
+              <div className="bg-background p-6 mb-6">
                 <img
                   src={featuredImg}
-                  alt="Re:SILK — upcycled silk accessory"
-                  className="w-full h-[300px] object-contain"
+                  alt="Re:SILK — silk texture and color detail"
+                  className="w-full h-[320px] object-cover"
                   draggable={false}
                 />
               </div>
 
               <div className="text-center space-y-4">
                 <p className="text-sm text-muted-foreground uppercase tracking-wider">
-                  Featured piece
+                  Example piece
                 </p>
+
                 <h3 className="text-2xl font-serif text-foreground">
                   Re:SILK Sleep Mask
                 </h3>
+
                 <p className="text-muted-foreground text-sm">
-                  A sleep essential made from reclaimed silk neckties. Soft,
-                  comfortable, and designed to feel gentle on skin and hair —
-                  with a flexible elastic strap for an easy fit.
+                  Each mask is priced individually — no two pieces are exactly
+                  the same.
                 </p>
+
                 <div className="pt-4 border-t border-border/50">
                   <p className="text-primary font-serif text-xl">
-                    Limited small-batch drop
+                    Price on request
                   </p>
                 </div>
               </div>
