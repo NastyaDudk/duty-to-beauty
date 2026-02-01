@@ -6,7 +6,6 @@ const PRODUCT_URL =
   "https://silk4.me/ua/shop_ua/resilk_sleep_mask__scrunchie_ua/";
 
 const Hero = () => {
-  // ✅ картинка из /public
   const heroImg = `${import.meta.env.BASE_URL}girlwithscrunchie.jpg`;
 
   const scrollToContact = () => {
@@ -27,7 +26,6 @@ const Hero = () => {
         pt-20 sm:pt-24 lg:pt-14
       "
     >
-      {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/30" />
 
       <div className="container mx-auto px-6 relative z-10">
@@ -60,7 +58,6 @@ your skin, and your hair.
 Upcycled. Thoughtful. Limited.`}
             </p>
 
-            {/* INFO */}
             <div
               className="
                 mt-6 flex flex-col items-center text-center gap-3
@@ -82,7 +79,6 @@ Upcycled. Thoughtful. Limited.`}
               </span>
             </div>
 
-            {/* BUTTONS */}
             <div
               className="
                 flex flex-col items-center gap-4 pt-6
@@ -108,7 +104,6 @@ Upcycled. Thoughtful. Limited.`}
               </Button>
             </div>
 
-            {/* STATS */}
             <div className="grid grid-cols-3 gap-8 pt-10 border-t border-border/50 max-w-xl">
               <div className="text-center">
                 <div className="text-4xl font-medium text-foreground">100%</div>
@@ -116,14 +111,12 @@ Upcycled. Thoughtful. Limited.`}
                   reclaimed silk
                 </p>
               </div>
-
               <div className="text-center">
                 <div className="text-4xl font-medium text-foreground">1/1</div>
                 <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
                   one of a kind
                 </p>
               </div>
-
               <div className="text-center">
                 <div className="text-4xl font-medium text-foreground">Re</div>
                 <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
@@ -141,16 +134,19 @@ Upcycled. Thoughtful. Limited.`}
               <img
                 src={heroImg}
                 alt="Re:SILK — upcycled silk sleep mask with scrunchie strap"
-                className="w-full h-[600px] object-cover object-center"
+                // ВАЖНО: обрезаем СВЕРХУ, сохраняем низ (руки/маска/скранчи)
+                className="w-full h-[600px] object-cover"
+                style={{ objectPosition: "center bottom" }}
                 draggable={false}
               />
 
+              {/* Бейдж поднимаем наверх в белую зону */}
               <a
                 href={PRODUCT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="
-                  absolute left-[8%] top-[72%]
+                  absolute left-[8%] top-[10%]
                   bg-background/90 backdrop-blur-sm
                   border border-border/50
                   px-6 py-4 max-w-[360px]
