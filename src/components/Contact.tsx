@@ -29,7 +29,9 @@ type ApiResponse = {
 };
 
 const SOURCE_TAG = "re:silk";
-const REQUEST_TIMEOUT_MS = 12000;
+
+// Render может долго отвечать (cold start). Не обрываем слишком рано.
+const REQUEST_TIMEOUT_MS = 60000; // 60s
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -48,27 +50,27 @@ const Contact = () => {
     const phone = formData.phone.trim();
     const message = formData.message.trim();
 
-    // ✅ наша валидация (вместо browser required)
+    // ✅ наша валидация (чтобы не было браузерных подсказок)
     if (!name || !phone) {
       toast.error("Please fill in your name and phone number.");
       return;
     }
 
-    // ✅ гарантируем, что в телеграме будет видно re:silk
-    // (даже если сервер игнорит поле source)
-    const messageWithSource = message
-      ? `[${SOURCE_TAG}] ${message}`
-      : `[${SOURCE_TAG}]`;
-
+    // ✅ source оставляем отдельным полем (главное),
+    // а в message добавляем тэг только если сервер реально игнорит source
     const payload: LeadPayload = {
       name,
       phone,
-      message: messageWithSource,
+      ...(message ? { message } : {}),
       source: SOURCE_TAG,
     };
 
     setIsSubmitting(true);
 
+    // ✅ мгновенно показываем “отправляем”
+    const toastId = toast.loading("Sending…");
+
+    // ✅ timeout, но большой (Render)
     const controller = new AbortController();
     const timer = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
@@ -77,11 +79,13 @@ const Contact = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // ✅ доп. канал на случай если сервер читает из хедера
           "X-Lead-Source": SOURCE_TAG,
         },
         body: JSON.stringify(payload),
         signal: controller.signal,
+        // помогает в некоторых браузерах не “терять” запрос
+        keepalive: true,
+        cache: "no-store",
       });
 
       const raw = await res.text().catch(() => "");
@@ -97,18 +101,20 @@ const Contact = () => {
 
       if (!ok) {
         console.error("Lead submit error:", res.status, raw);
-        toast.error("Couldn’t send your request. Please try again.");
+        toast.error("Couldn’t send your request. Please try again.", { id: toastId });
         return;
       }
 
-      toast.success("✅ Sent! We’ll get back to you shortly.");
+      toast.success("✅ Sent! We’ll get back to you shortly.", { id: toastId });
       setFormData({ name: "", phone: "", message: "" });
     } catch (err: any) {
       if (err?.name === "AbortError") {
-        toast.error("Request timed out. Please try again.");
+        toast.error("Server is waking up (Render). Please try again in 10–20 seconds.", {
+          id: toastId,
+        });
       } else {
         console.error(err);
-        toast.error("Connection error. Please check the server / Render.");
+        toast.error("Connection error. Please check the server / Render.", { id: toastId });
       }
     } finally {
       window.clearTimeout(timer);
@@ -125,16 +131,14 @@ const Contact = () => {
           {/* LEFT: Form */}
           <div className="flex flex-col justify-between h-full space-y-8">
             <div className="space-y-4">
-              <p className="text-gold uppercase tracking-[0.3em] text-sm">
-                Contact
-              </p>
+              <p className="text-gold uppercase tracking-[0.3em] text-sm">Contact</p>
 
               <h2 className="text-3xl md:text-4xl font-serif font-light text-background">
                 Get a <span className="text-gold">personal consultation</span>
               </h2>
             </div>
 
-            {/* ✅ noValidate отключает браузерные подсказки типа “Заполните поле” */}
+            {/* ✅ noValidate убирает “Заполните поле” от браузера */}
             <form onSubmit={handleSubmit} className="space-y-6" noValidate>
               <div className="grid md:grid-cols-2 gap-4">
                 <Input
@@ -172,22 +176,22 @@ const Contact = () => {
               <div className="pt-4">
                 <Button
                   type="submit"
-                  className="w-full md:w-auto bg-gold text-accent-foreground hover:bg-gold-light border border-gold hover:border-gold-light"
                   disabled={isSubmitting}
+                  className="
+                    w-full md:w-auto
+                    bg-gold text-accent-foreground
+                    hover:bg-gold-light
+                    border border-gold hover:border-gold-light
+                  "
                 >
-                  {isSubmitting ? "Sending..." : "Send request"}
+                  {isSubmitting ? "Sending…" : "Send request"}
                   <Send className="w-4 h-4 ml-2" />
                 </Button>
               </div>
             </form>
 
             {/* Contact Info */}
-            <div
-              className="
-                flex flex-col items-center text-center gap-6 pt-8
-                md:flex-row md:flex-wrap md:items-center md:text-left md:gap-10
-              "
-            >
+            <div className="flex flex-col items-center text-center gap-6 pt-8 md:flex-row md:flex-wrap md:items-center md:text-left md:gap-10">
               <a
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
@@ -200,10 +204,7 @@ const Contact = () => {
                 </span>
               </a>
 
-              <a
-                href={`mailto:${email}`}
-                className="flex items-center gap-3 group cursor-pointer"
-              >
+              <a href={`mailto:${email}`} className="flex items-center gap-3 group cursor-pointer">
                 <Mail className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
                 <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
                   Email us
@@ -212,9 +213,7 @@ const Contact = () => {
 
               <div className="flex items-center gap-3 cursor-default">
                 <MapPin className="w-5 h-5 text-gold" />
-                <span className="text-sm text-background/80">
-                  Ukraine / Europe
-                </span>
+                <span className="text-sm text-background/80">Ukraine / Europe</span>
               </div>
             </div>
           </div>

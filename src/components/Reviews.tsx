@@ -4,19 +4,19 @@ const reviews = [
   {
     name: "Emily R.",
     role: "Creative Director",
-    text: "Re:SILK feels thoughtful and intentional. The silk is beautiful, but what really matters to me is the idea behind it — giving premium materials a second life.",
+    text: "Silk really works for the delicate skin around the eyes and the idea behind it really matters to me - giving premium materials a second life.",
     rating: 4.9,
   },
   {
     name: "Sophie M.",
     role: "Fashion Buyer",
-    text: "I love that no two pieces are the same. The mask is soft, comfortable, and the elastic strap is very gentle. It feels like something personal, not mass-produced.",
+    text: "I love that no two pieces are the same. The mask is soft, comfortable and scrunchie is very gentle. It feels like something really personal.",
     rating: 4.7,
   },
   {
     name: "Laura H.",
     role: "Wellness Consultant",
-    text: "I’m very sensitive to fabrics, especially around my face. Re:SILK works perfectly for me — breathable, smooth, and without irritation.",
+    text: "I’m very sensitive to fabrics, especially for my face. Re:SILK works perfectly for me — breathable, soft, smooth and without irritations.",
     rating: 5,
   },
 ];
