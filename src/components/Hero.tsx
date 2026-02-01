@@ -136,7 +136,7 @@ Upcycled. Thoughtful. Limited.`}
                 alt="Re:SILK — upcycled silk sleep mask with scrunchie strap"
                 // ВАЖНО: обрезаем СВЕРХУ, сохраняем низ (руки/маска/скранчи)
                 className="w-full h-[600px] object-cover"
-                style={{ objectPosition: "center bottom" }}
+                style={{ objectPosition: "80% bottom" }}
                 draggable={false}
               />
 
@@ -158,9 +158,9 @@ Upcycled. Thoughtful. Limited.`}
                   New drop
                 </p>
                 <p className="text-lg font-serif text-foreground">
-                  Re:SILK sleep mask
+                  Re:SILK sleep mask with scrunchie
                 </p>
-                <p className="mt-2 text-xs underline underline-offset-4 text-muted-foreground">
+                <p className="mt-2 text-xs underline underline-offset-4 text-muted-foreground text-center">
                   Open product page
                 </p>
               </a>

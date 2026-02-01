@@ -21,6 +21,7 @@ type LeadPayload = {
   name: string;
   phone: string;
   message?: string;
+  source?: string;
 };
 
 type ApiResponse = {
@@ -52,9 +53,10 @@ const Contact = () => {
     }
 
     const payload: LeadPayload = {
-      name,
-      phone,
-      ...(message ? { message } : {}),
+  name,
+  phone,
+  ...(message ? { message } : {}),
+  source: "re:silk",
     };
 
     setIsSubmitting(true);

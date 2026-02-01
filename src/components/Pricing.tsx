@@ -2,11 +2,11 @@ import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const priceFacts = [
-  "Pricing depends on the specific silk and finishing",
-  "Each sleep mask is one of a kind — no repeats",
+  "Individual pricing for each piece",
+  "Sleep mask with matching elastic scrunchie",
   "Handcrafted in small batches",
   "Made from reclaimed Mulberry silk neckties",
-  "Availability is limited by materials",
+  "Availability depends on sourced materials",
 ];
 
 const Pricing = () => {
@@ -17,6 +17,7 @@ const Pricing = () => {
     });
   };
 
+  // image from /public
   const featuredImg = `${import.meta.env.BASE_URL}tiemask.jpg`;
 
   return (
@@ -31,20 +32,20 @@ const Pricing = () => {
               </p>
 
               <h2 className="text-3xl md:text-4xl font-serif font-light text-foreground">
-                Individual pricing for a{" "}
+                Thoughtful pricing for a{" "}
                 <span className="text-primary">limited collection</span>
               </h2>
             </div>
 
             <p className="text-muted-foreground leading-relaxed max-w-xl">
               Re:SILK pieces are not mass-produced, which means there is no fixed
-              price. Each sleep mask is priced individually based on the silk,
-              its condition, craftsmanship, and finishing.
+              price. Each set is priced individually based on the silk, its
+              condition, craftsmanship, and finishing.
             </p>
 
             <p className="text-muted-foreground leading-relaxed max-w-xl">
-              This approach keeps the collection transparent and true to its
-              purpose — giving reclaimed silk a thoughtful second life.
+              Every piece includes a silk sleep mask paired with a matching
+              elastic scrunchie — carefully assembled from reclaimed materials.
             </p>
 
             <ul className="space-y-4">
@@ -58,13 +59,17 @@ const Pricing = () => {
               ))}
             </ul>
 
-            <div className="pt-4">
+            <div className="pt-6">
               <p className="text-sm text-muted-foreground mb-4">
                 To check availability and receive the current price, please
                 contact us directly.
               </p>
 
-              <Button variant="luxury" size="lg" onClick={scrollToContact}>
+              <Button
+                size="lg"
+                onClick={scrollToContact}
+                className="w-auto px-10"
+              >
                 Ask for price & availability
               </Button>
             </div>
@@ -76,23 +81,24 @@ const Pricing = () => {
               <div className="bg-background p-6 mb-6">
                 <img
                   src={featuredImg}
-                  alt="Example piece — brown silk sleep mask made from a brown necktie"
-                  className="w-full h-[350px] object-cover object-bottom"
+                  alt="Re:SILK — silk sleep mask with matching scrunchie"
+                  className="w-full h-[310px] object-cover"
+                  style={{ objectPosition: "left bottom" }}
                   draggable={false}
                 />
               </div>
 
               <div className="text-center space-y-4">
                 <p className="text-sm text-muted-foreground uppercase tracking-wider">
-                  Example piece
+                  Example set
                 </p>
 
                 <h3 className="text-2xl font-serif text-foreground">
-                  Re:SILK Sleep Mask
+                  Re:SILK Sleep Mask & Scrunchie
                 </h3>
 
                 <p className="text-muted-foreground text-sm">
-                  Each piece is priced individually — no two are exactly the same.
+                  Each set is priced individually — no two are exactly the same.
                 </p>
 
                 <div className="pt-4 border-t border-border/50">
