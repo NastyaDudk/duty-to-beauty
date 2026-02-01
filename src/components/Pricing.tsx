@@ -82,7 +82,7 @@ const Pricing = () => {
                 <img
                   src={featuredImg}
                   alt="Re:SILK — silk sleep mask with matching scrunchie"
-                  className="w-full h-[310px] object-cover"
+                  className="w-full h-[360px] object-cover"
                   style={{ objectPosition: "left bottom" }}
                   draggable={false}
                 />
