@@ -29,18 +29,13 @@ type ApiResponse = {
 };
 
 const SOURCE_TAG = "re:silk";
+const REQUEST_TIMEOUT_MS = 25000; // 25s: достаточно, но не "вечно"
 
-// Render может долго отвечать (cold start). Не обрываем слишком рано.
-const REQUEST_TIMEOUT_MS = 60000; // 60s
-
-const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    message: "",
-  });
-
+export default function Contact() {
+  const [formData, setFormData] = useState({ name: "", phone: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const email = "Silkandnature" + "@gmail.com";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,27 +45,25 @@ const Contact = () => {
     const phone = formData.phone.trim();
     const message = formData.message.trim();
 
-    // ✅ наша валидация (чтобы не было браузерных подсказок)
+    // убираем браузерные “Заполните поле”
     if (!name || !phone) {
       toast.error("Please fill in your name and phone number.");
       return;
     }
 
-    // ✅ source оставляем отдельным полем (главное),
-    // а в message добавляем тэг только если сервер реально игнорит source
+    // ✅ чтобы в телеграме точно было видно, что это re:silk
+    const messageWithSource = message ? `[${SOURCE_TAG}] ${message}` : `[${SOURCE_TAG}]`;
+
     const payload: LeadPayload = {
       name,
       phone,
-      ...(message ? { message } : {}),
+      message: messageWithSource,
       source: SOURCE_TAG,
     };
 
     setIsSubmitting(true);
-
-    // ✅ мгновенно показываем “отправляем”
     const toastId = toast.loading("Sending…");
 
-    // ✅ timeout, но большой (Render)
     const controller = new AbortController();
     const timer = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
@@ -79,12 +72,9 @@ const Contact = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Lead-Source": SOURCE_TAG,
         },
         body: JSON.stringify(payload),
         signal: controller.signal,
-        // помогает в некоторых браузерах не “терять” запрос
-        keepalive: true,
         cache: "no-store",
       });
 
@@ -97,7 +87,8 @@ const Contact = () => {
         data = null;
       }
 
-      const ok = res.ok && (data?.ok === true || data?.success === true);
+      // ✅ многие бэки возвращают просто 200 OK без ok/success
+      const ok = res.ok && (data?.ok === true || data?.success === true || data === null || raw === "");
 
       if (!ok) {
         console.error("Lead submit error:", res.status, raw);
@@ -109,9 +100,7 @@ const Contact = () => {
       setFormData({ name: "", phone: "", message: "" });
     } catch (err: any) {
       if (err?.name === "AbortError") {
-        toast.error("Server is waking up (Render). Please try again in 10–20 seconds.", {
-          id: toastId,
-        });
+        toast.error("Server is waking up. Please try again in 10–20 seconds.", { id: toastId });
       } else {
         console.error(err);
         toast.error("Connection error. Please check the server / Render.", { id: toastId });
@@ -122,42 +111,33 @@ const Contact = () => {
     }
   };
 
-  const email = "Silkandnature" + "@gmail.com";
-
   return (
     <section id="contact" className="py-24 bg-silk-charcoal">
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16">
-          {/* LEFT: Form */}
+          {/* LEFT */}
           <div className="flex flex-col justify-between h-full space-y-8">
             <div className="space-y-4">
               <p className="text-gold uppercase tracking-[0.3em] text-sm">Contact</p>
-
               <h2 className="text-3xl md:text-4xl font-serif font-light text-background">
                 Get a <span className="text-gold">personal consultation</span>
               </h2>
             </div>
 
-            {/* ✅ noValidate убирает “Заполните поле” от браузера */}
             <form onSubmit={handleSubmit} className="space-y-6" noValidate>
               <div className="grid md:grid-cols-2 gap-4">
                 <Input
                   placeholder="Your name"
                   value={formData.name}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, name: e.target.value }))
-                  }
+                  onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
                   className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground h-12"
                 />
-
                 <Input
                   type="tel"
                   inputMode="tel"
                   placeholder="Phone number"
                   value={formData.phone}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, phone: e.target.value }))
-                  }
+                  onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
                   className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground h-12"
                 />
               </div>
@@ -166,9 +146,7 @@ const Contact = () => {
                 <Textarea
                   placeholder="Your message (optional)"
                   value={formData.message}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, message: e.target.value }))
-                  }
+                  onChange={(e) => setFormData((p) => ({ ...p, message: e.target.value }))}
                   className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground min-h-[160px] resize-none"
                 />
               </div>
@@ -177,12 +155,7 @@ const Contact = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="
-                    w-full md:w-auto
-                    bg-gold text-accent-foreground
-                    hover:bg-gold-light
-                    border border-gold hover:border-gold-light
-                  "
+                  className="w-full md:w-auto bg-gold text-accent-foreground hover:bg-gold-light border border-gold hover:border-gold-light"
                 >
                   {isSubmitting ? "Sending…" : "Send request"}
                   <Send className="w-4 h-4 ml-2" />
@@ -190,7 +163,7 @@ const Contact = () => {
               </div>
             </form>
 
-            {/* Contact Info */}
+            {/* INFO */}
             <div className="flex flex-col items-center text-center gap-6 pt-8 md:flex-row md:flex-wrap md:items-center md:text-left md:gap-10">
               <a
                 href="https://www.instagram.com/silk4me"
@@ -218,7 +191,7 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* RIGHT: Image */}
+          {/* RIGHT */}
           <div className="relative hidden lg:block">
             <div className="absolute -inset-4 border border-gold/20" />
             <img
@@ -232,6 +205,4 @@ const Contact = () => {
       </div>
     </section>
   );
-};
-
-export default Contact;
+}
