@@ -13,7 +13,7 @@ const Header = () => {
   const navItems: NavItem[] = [
     { label: "About", href: "#about" },
     {
-      label: "re:silk Collection",
+      label: "Re:SILK Collection",
       href: "https://silk4.me/ua/shop_ua/resilk_sleep_mask__scrunchie_ua/",
       external: true,
     },
@@ -37,57 +37,61 @@ const Header = () => {
       return;
     }
 
-    if (href === "#") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      closeMenu();
-      return;
-    }
-
     if (href.startsWith("#")) {
-      const el = document.querySelector(href);
-      el?.scrollIntoView({ behavior: "smooth", block: "start" });
+      document.querySelector(href)?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
       closeMenu();
     }
   };
 
   const linkClass =
-    "text-sm uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors duration-300";
+    "text-sm uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground transition-colors duration-300";
 
-  // ✅ logo.png должен лежать в /public/logo.png
+  // logo из public (прозрачный PNG!)
   const logoSrc = `${import.meta.env.BASE_URL}logo.png`;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-black/10">
-      <div className="container mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo → Contact */}
+    <header className="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-md border-b border-black/5">
+      <div className="container mx-auto px-6">
+        <div className="flex h-[72px] items-center justify-between">
+          {/* LOGO */}
           <button
             type="button"
             onClick={() => go("#contact")}
-            className="flex items-center gap-3 group"
-            aria-label="Get a consultation"
+            className="flex items-center gap-4 group"
+            aria-label="Go to contact"
           >
             <img
               src={logoSrc}
               alt="Silk4me logo"
-              className="h-8 w-8 object-contain transition-opacity group-hover:opacity-80"
+              className="
+                h-10 w-10 object-contain
+                bg-transparent
+                transition-transform duration-300
+                group-hover:scale-105
+              "
               draggable={false}
             />
-            <span className="text-2xl font-serif tracking-[0.3em] text-foreground">
-              SILK<span className="text-primary">4</span>ME
+
+            <span className="text-[26px] font-serif tracking-[0.35em] text-foreground">
+              SILK
+              <span className="text-[#1f4c41]">4</span>
+              ME
             </span>
           </button>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8">
+          {/* DESKTOP NAV */}
+          <nav className="hidden md:flex items-center gap-10">
             {navItems.map((item) =>
               item.external ? (
                 <a
                   key={item.label}
                   href={item.href}
-                  className={linkClass}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className={linkClass}
                 >
                   {item.label}
                 </a>
@@ -104,31 +108,30 @@ const Header = () => {
             )}
           </nav>
 
-          {/* Mobile Button */}
+          {/* MOBILE TOGGLE */}
           <button
             type="button"
             className="md:hidden text-foreground"
             onClick={() => setIsOpen((v) => !v)}
             aria-label="Toggle menu"
-            aria-expanded={isOpen}
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
-        {/* Mobile Nav */}
+        {/* MOBILE NAV */}
         {isOpen && (
-          <nav className="md:hidden pt-6 pb-4 border-t border-black/10 mt-4">
-            <div className="flex flex-col gap-4">
+          <nav className="md:hidden pb-6 pt-4 border-t border-black/5">
+            <div className="flex flex-col gap-5">
               {navItems.map((item) =>
                 item.external ? (
                   <a
                     key={item.label}
                     href={item.href}
-                    className={`${linkClass} text-left`}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={closeMenu}
+                    className={linkClass}
                   >
                     {item.label}
                   </a>
@@ -137,7 +140,7 @@ const Header = () => {
                     key={item.label}
                     type="button"
                     onClick={() => go(item)}
-                    className={`${linkClass} text-left`}
+                    className={linkClass}
                   >
                     {item.label}
                   </button>

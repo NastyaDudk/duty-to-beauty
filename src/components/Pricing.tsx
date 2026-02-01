@@ -18,7 +18,7 @@ const Pricing = () => {
   };
 
   // image from public (GitHub Pages safe)
-  const featuredImg = `${import.meta.env.BASE_URL}color6.jpg`;
+  const featuredImg = `${import.meta.env.BASE_URL}color9.jpg`;
 
   return (
     <section id="pricing" className="py-24 bg-background">
