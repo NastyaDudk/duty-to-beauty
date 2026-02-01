@@ -15,7 +15,7 @@ const API_URL = import.meta.env.VITE_API_URL || DEFAULT_API;
 
 // image from public (works locally + GitHub Pages)
 // IMPORTANT: case-sensitive on GitHub Pages!
-const lifestyleImg = `${import.meta.env.BASE_URL}girlinmask.JPG`;
+const lifestyleImg = `${import.meta.env.BASE_URL}color8.jpg`;
 
 type LeadPayload = {
   name: string;

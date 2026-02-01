@@ -6,7 +6,6 @@ const PRODUCT_URL =
   "https://silk4.me/ua/shop_ua/resilk_sleep_mask__scrunchie_ua/";
 
 const Hero = () => {
-  // image from /public (works locally + GitHub Pages)
   const heroImg = `${import.meta.env.BASE_URL}girlwithscrunchie.jpg`;
 
   const scrollToContact = () => {
@@ -27,12 +26,11 @@ const Hero = () => {
         pt-20 sm:pt-24 lg:pt-14
       "
     >
-      {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/30" />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* LEFT: TEXT */}
+          {/* TEXT */}
           <div className="space-y-7 animate-fade-in">
             <div className="space-y-3">
               <button
@@ -48,7 +46,7 @@ const Hero = () => {
             </div>
 
             <p className="text-muted-foreground text-xl leading-relaxed max-w-xl whitespace-pre-line">
-              {`Re:SILK is a new chapter of silk.
+{`Re:SILK is a new chapter of silk.
 
 A collection of sleep masks with elastic straps,
 crafted from reclaimed silk neckties.
@@ -60,7 +58,6 @@ your skin, and your hair.
 Upcycled. Thoughtful. Limited.`}
             </p>
 
-            {/* INFO */}
             <div
               className="
                 mt-6 flex flex-col items-center text-center gap-3
@@ -82,7 +79,6 @@ Upcycled. Thoughtful. Limited.`}
               </span>
             </div>
 
-            {/* BUTTONS */}
             <div
               className="
                 flex flex-col items-center gap-4 pt-6
@@ -108,7 +104,6 @@ Upcycled. Thoughtful. Limited.`}
               </Button>
             </div>
 
-            {/* STATS */}
             <div className="grid grid-cols-3 gap-8 pt-10 border-t border-border/50 max-w-xl">
               <div className="text-center">
                 <div className="text-4xl font-medium text-foreground">100%</div>
@@ -116,14 +111,12 @@ Upcycled. Thoughtful. Limited.`}
                   reclaimed silk
                 </p>
               </div>
-
               <div className="text-center">
                 <div className="text-4xl font-medium text-foreground">1/1</div>
                 <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
                   one of a kind
                 </p>
               </div>
-
               <div className="text-center">
                 <div className="text-4xl font-medium text-foreground">Re</div>
                 <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
@@ -131,23 +124,9 @@ Upcycled. Thoughtful. Limited.`}
                 </p>
               </div>
             </div>
-
-            {/* SEO (hidden) */}
-            <div className="sr-only">
-              <h2>
-                Re:SILK by Silk4me — upcycled silk sleep masks made from reclaimed
-                neckties
-              </h2>
-              <p>
-                Re:SILK is a limited collection of sleep masks with elastic
-                straps, created from reclaimed silk neckties. Each piece is
-                unique and upcycled.
-              </p>
-              <p>Explore Re:SILK here: {COLLECTION_URL}</p>
-            </div>
           </div>
 
-          {/* RIGHT: IMAGE + FLOATING BADGE */}
+          {/* IMAGE */}
           <div className="relative hidden lg:block">
             <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-transparent pointer-events-none" />
 
@@ -155,42 +134,43 @@ Upcycled. Thoughtful. Limited.`}
               <img
                 src={heroImg}
                 alt="Re:SILK — upcycled silk sleep mask with scrunchie strap"
-                className="w-full h-[600px] object-cover object-[center_25%]"
+                // ВАЖНО: обрезаем СВЕРХУ, сохраняем низ (руки/маска/скранчи)
+                className="w-full h-[600px] object-cover"
+                style={{ objectPosition: "center bottom" }}
                 draggable={false}
               />
 
-              {/* Badge: centered horizontally inside the right block, floating vertically */}
+              {/* Бейдж поднимаем наверх в белую зону */}
               <a
                 href={PRODUCT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="
-                  absolute left-1/2 top-[72%]
+                  absolute right-[20%] top-[60%]
                   bg-background/90 backdrop-blur-sm
                   border border-border/50
                   px-6 py-4 max-w-[360px]
                   shadow-sm hover:shadow-md transition-shadow
                 "
-                style={{ animation: "badge-float 4s ease-in-out infinite" }}
+                style={{ animation: "badge-float 3.6s ease-in-out infinite" }}
               >
                 <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-2 text-center">
                   New drop
                 </p>
-                <p className="text-lg font-serif text-foreground text-center">
+                <p className="text-lg font-serif text-foreground">
                   Re:SILK sleep mask
                 </p>
-                <p className="mt-2 text-xs underline underline-offset-4 text-muted-foreground text-center">
+                <p className="mt-2 text-xs underline underline-offset-4 text-muted-foreground">
                   Open product page
                 </p>
               </a>
             </div>
 
-            {/* IMPORTANT: animation includes -50% X so it stays centered */}
             <style>{`
               @keyframes badge-float {
-                0%   { transform: translate(-50%, 0); }
-                50%  { transform: translate(-50%, -18px); }
-                100% { transform: translate(-50%, 0); }
+                0% { transform: translate(0,0); }
+                50% { transform: translate(40px, -30px); }
+                100% { transform: translate(0,0); }
               }
             `}</style>
           </div>
