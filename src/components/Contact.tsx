@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -6,7 +6,12 @@ import { toast } from "sonner";
 import { Send, MapPin, Instagram, Mail } from "lucide-react";
 
 // Local -> localhost, Production -> Render
-const DEFAULT_API = import.meta.env.DEV
+const isLocal =
+  typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1");
+
+const DEFAULT_API = isLocal
   ? "http://localhost:5050/api/lead"
   : "https://silk4me.onrender.com/api/lead";
 
@@ -22,20 +27,28 @@ type LeadPayload = {
   source?: string;
 };
 
-type ApiResponse = {
-  ok?: boolean;
-  success?: boolean;
-  error?: string;
-};
-
 const SOURCE_TAG = "re:silk";
-const REQUEST_TIMEOUT_MS = 25000; // 25s: достаточно, но не "вечно"
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: "", phone: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const email = "Silkandnature" + "@gmail.com";
+  const email = useMemo(() => "Silkandnature" + "@gmail.com", []);
+
+  // ✅ PREWARM: прогреваем Render сразу при заходе на страницу
+  // (после этого отправка обычно становится быстрее)
+  useEffect(() => {
+    if (isLocal) return;
+
+    // Лёгкий запрос без тела — просто “разбудить” сервер
+    fetch(API_URL, {
+      method: "OPTIONS",
+      cache: "no-store",
+      mode: "cors",
+    }).catch(() => {
+      // игнорируем ошибки прогрева
+    });
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,68 +58,46 @@ export default function Contact() {
     const phone = formData.phone.trim();
     const message = formData.message.trim();
 
-    // убираем браузерные “Заполните поле”
     if (!name || !phone) {
       toast.error("Please fill in your name and phone number.");
       return;
     }
 
-    // ✅ чтобы в телеграме точно было видно, что это re:silk
+    // ✅ чтобы в Telegram точно было видно, что это re:silk
     const messageWithSource = message ? `[${SOURCE_TAG}] ${message}` : `[${SOURCE_TAG}]`;
 
     const payload: LeadPayload = {
       name,
       phone,
-      message: messageWithSource,
+      ...(messageWithSource ? { message: messageWithSource } : {}),
       source: SOURCE_TAG,
     };
 
     setIsSubmitting(true);
-    const toastId = toast.loading("Sending…");
-
-    const controller = new AbortController();
-    const timer = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
     try {
       const res = await fetch(API_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
-        signal: controller.signal,
+        mode: "cors",
         cache: "no-store",
       });
 
-      const raw = await res.text().catch(() => "");
-      let data: ApiResponse | null = null;
-
-      try {
-        data = raw ? (JSON.parse(raw) as ApiResponse) : null;
-      } catch {
-        data = null;
-      }
-
-      // ✅ многие бэки возвращают просто 200 OK без ok/success
-      const ok = res.ok && (data?.ok === true || data?.success === true || data === null || raw === "");
-
-      if (!ok) {
+      // ✅ Как на укр лендинге: считаем успехом любой 2xx
+      if (!res.ok) {
+        const raw = await res.text().catch(() => "");
         console.error("Lead submit error:", res.status, raw);
-        toast.error("Couldn’t send your request. Please try again.", { id: toastId });
+        toast.error("Couldn’t send your request. Please try again.");
         return;
       }
 
-      toast.success("✅ Sent! We’ll get back to you shortly.", { id: toastId });
+      toast.success("✅ Sent! We’ll get back to you shortly.");
       setFormData({ name: "", phone: "", message: "" });
-    } catch (err: any) {
-      if (err?.name === "AbortError") {
-        toast.error("Server is waking up. Please try again in 10–20 seconds.", { id: toastId });
-      } else {
-        console.error(err);
-        toast.error("Connection error. Please check the server / Render.", { id: toastId });
-      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Connection error. Please check the server / Render.");
     } finally {
-      window.clearTimeout(timer);
       setIsSubmitting(false);
     }
   };
@@ -118,26 +109,35 @@ export default function Contact() {
           {/* LEFT */}
           <div className="flex flex-col justify-between h-full space-y-8">
             <div className="space-y-4">
-              <p className="text-gold uppercase tracking-[0.3em] text-sm">Contact</p>
+              <p className="text-gold uppercase tracking-[0.3em] text-sm">
+                Contact
+              </p>
+
               <h2 className="text-3xl md:text-4xl font-serif font-light text-background">
                 Get a <span className="text-gold">personal consultation</span>
               </h2>
             </div>
 
+            {/* ✅ noValidate — чтобы не было браузерных подсказок */}
             <form onSubmit={handleSubmit} className="space-y-6" noValidate>
               <div className="grid md:grid-cols-2 gap-4">
                 <Input
                   placeholder="Your name"
                   value={formData.name}
-                  onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((p) => ({ ...p, name: e.target.value }))
+                  }
                   className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground h-12"
                 />
+
                 <Input
                   type="tel"
                   inputMode="tel"
                   placeholder="Phone number"
                   value={formData.phone}
-                  onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((p) => ({ ...p, phone: e.target.value }))
+                  }
                   className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground h-12"
                 />
               </div>
@@ -146,7 +146,9 @@ export default function Contact() {
                 <Textarea
                   placeholder="Your message (optional)"
                   value={formData.message}
-                  onChange={(e) => setFormData((p) => ({ ...p, message: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((p) => ({ ...p, message: e.target.value }))
+                  }
                   className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground min-h-[160px] resize-none"
                 />
               </div>
@@ -157,7 +159,7 @@ export default function Contact() {
                   disabled={isSubmitting}
                   className="w-full md:w-auto bg-gold text-accent-foreground hover:bg-gold-light border border-gold hover:border-gold-light"
                 >
-                  {isSubmitting ? "Sending…" : "Send request"}
+                  {isSubmitting ? "Sending..." : "Send request"}
                   <Send className="w-4 h-4 ml-2" />
                 </Button>
               </div>
@@ -177,7 +179,10 @@ export default function Contact() {
                 </span>
               </a>
 
-              <a href={`mailto:${email}`} className="flex items-center gap-3 group cursor-pointer">
+              <a
+                href={`mailto:${email}`}
+                className="flex items-center gap-3 group cursor-pointer"
+              >
                 <Mail className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
                 <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
                   Email us
@@ -186,7 +191,9 @@ export default function Contact() {
 
               <div className="flex items-center gap-3 cursor-default">
                 <MapPin className="w-5 h-5 text-gold" />
-                <span className="text-sm text-background/80">Ukraine / Europe</span>
+                <span className="text-sm text-background/80">
+                  Ukraine / Europe
+                </span>
               </div>
             </div>
           </div>
