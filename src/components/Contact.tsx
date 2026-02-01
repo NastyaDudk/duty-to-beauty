@@ -5,12 +5,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Send, MapPin, Instagram, Mail } from "lucide-react";
 
+
 // Local -> localhost, Production -> Render
 const DEFAULT_API = import.meta.env.DEV
   ? "http://localhost:5050/api/lead"
   : "https://silk4me.onrender.com/api/lead";
 
 const API_URL = import.meta.env.VITE_API_URL || DEFAULT_API;
+
+// image from public (works locally + GitHub Pages)
+// IMPORTANT: case-sensitive on GitHub Pages!
+const lifestyleImg = `${import.meta.env.BASE_URL}girlmask.JPG`;
 
 type LeadPayload = {
   name: string;
@@ -92,7 +97,12 @@ const Contact = () => {
   const email = "Silkandnature" + "@gmail.com";
 
   // image from public (works locally + GitHub Pages)
-  const lifestyleImg = `${import.meta.env.BASE_URL}silk-lifestyle.jpg`;
+  <img
+  src={lifestyleImg}
+  alt="Re:SILK — silk sleep mask"
+  className="w-full h-[560px] object-cover object-center"
+  draggable={false}
+/>
 
   return (
     <section id="contact" className="py-24 bg-silk-charcoal">

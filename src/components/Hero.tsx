@@ -6,8 +6,8 @@ const PRODUCT_URL =
   "https://silk4.me/ua/shop_ua/resilk_sleep_mask__scrunchie_ua/";
 
 const Hero = () => {
-  // ✅ если картинка лежит в /public/hero.jpg
-  const heroImg = `${import.meta.env.BASE_URL}hero.jpg`;
+  // ✅ картинка из /public
+  const heroImg = `${import.meta.env.BASE_URL}girlwithscrunchie.jpg`;
 
   const scrollToContact = () => {
     document.querySelector("#contact")?.scrollIntoView({
@@ -73,13 +73,9 @@ Upcycled. Thoughtful. Limited.`}
 
               <span
                 className="
-                  rounded-lg
-                  border border-primary/40
-                  bg-primary/10
-                  px-5 py-2
-                  text-sm font-semibold
-                  tracking-[0.3em] uppercase
-                  text-primary
+                  rounded-lg border border-primary/40 bg-primary/10
+                  px-5 py-2 text-sm font-semibold
+                  tracking-[0.3em] uppercase text-primary
                 "
               >
                 Upcycled neckties
@@ -97,7 +93,7 @@ Upcycled. Thoughtful. Limited.`}
                 variant="luxury"
                 size="lg"
                 onClick={scrollToContact}
-                className="w-full max-w-[320px] text-center sm:w-[320px]"
+                className="w-full max-w-[320px] sm:w-[320px]"
               >
                 Learn more
               </Button>
@@ -106,7 +102,7 @@ Upcycled. Thoughtful. Limited.`}
                 variant="luxuryOutline"
                 size="lg"
                 onClick={goToCollection}
-                className="w-full max-w-[320px] text-center sm:w-[320px]"
+                className="w-full max-w-[320px] sm:w-[320px]"
               >
                 View Re:SILK pieces
               </Button>
@@ -131,31 +127,9 @@ Upcycled. Thoughtful. Limited.`}
               <div className="text-center">
                 <div className="text-4xl font-medium text-foreground">Re</div>
                 <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
-                  reworked + refined
+                  reworked & refined
                 </p>
               </div>
-            </div>
-
-            {/* SEO block */}
-            <div className="sr-only">
-              <h2>
-                Re:SILK by Silk4me — upcycled silk sleep masks made from reclaimed
-                neckties
-              </h2>
-
-              <p>
-                Re:SILK is a limited collection of sleep masks with elastic
-                straps, created from reclaimed silk neckties. Each piece is
-                unique and upcycled.
-              </p>
-
-              <h3>Re:SILK sleep mask with scrunchie strap</h3>
-              <p>
-                Soft on skin and gentle for hair, the Re:SILK sleep mask is
-                designed for comfortable sleep and a mindful routine.
-              </p>
-
-              <p>Explore Re:SILK here: {COLLECTION_URL}</p>
             </div>
           </div>
 
@@ -166,8 +140,8 @@ Upcycled. Thoughtful. Limited.`}
             <div className="relative overflow-hidden">
               <img
                 src={heroImg}
-                alt="Re:SILK — upcycled silk sleep masks"
-                className="w-full h-[600px] object-cover object-top"
+                alt="Re:SILK — upcycled silk sleep mask with scrunchie strap"
+                className="w-full h-[600px] object-cover object-center"
                 draggable={false}
               />
 
@@ -176,16 +150,11 @@ Upcycled. Thoughtful. Limited.`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="
-                  absolute
-                  left-[8%]
-                  top-[72%]
+                  absolute left-[8%] top-[72%]
                   bg-background/90 backdrop-blur-sm
                   border border-border/50
-                  px-6 py-4
-                  max-w-[360px]
-                  shadow-sm
-                  hover:shadow-md
-                  transition-shadow
+                  px-6 py-4 max-w-[360px]
+                  shadow-sm hover:shadow-md transition-shadow
                 "
                 style={{ animation: "badge-float 3.6s ease-in-out infinite" }}
               >
