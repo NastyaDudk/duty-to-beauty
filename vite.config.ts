@@ -1,18 +1,14 @@
-// vite.config.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
-import { fileURLToPath, URL } from "node:url";
+import path from "node:path";
 
 export default defineConfig({
-  plugins: [
-    react(),
-    tsconfigPaths(),
-  ],
+  plugins: [react()],
+  // важно для GitHub Pages (репо: duty-to-beauty)
+  base: "/duty-to-beauty/",
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: "/duty-to-beauty/",
 });
