@@ -91,7 +91,7 @@ Upcycled. Thoughtful. Limited.`}
                 onClick={scrollToContact}
                 className="w-full max-w-[320px] sm:w-[320px]"
               >
-                Learn more
+               Check availability
               </Button>
 
               <Button
@@ -100,7 +100,7 @@ Upcycled. Thoughtful. Limited.`}
                 onClick={goToCollection}
                 className="w-full max-w-[320px] sm:w-[320px]"
               >
-                View Re:SILK
+               Reserve your piece
               </Button>
             </div>
 
