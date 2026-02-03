@@ -25,7 +25,7 @@ const Pricing = () => {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* TEXT */}
           <div className="space-y-8">
-            <div className="space-y-4">
+            <div className="space-y-4 text-center lg:text-left">
               <p className="text-primary uppercase tracking-[0.3em] text-sm">
                 Pricing
               </p>
@@ -36,18 +36,18 @@ const Pricing = () => {
               </h2>
             </div>
 
-            <p className="text-foreground/70 leading-relaxed max-w-xl text-base md:text-[1.05rem]">
+            <p className="text-foreground/70 leading-relaxed max-w-xl text-base md:text-[1.05rem] mx-auto lg:mx-0 text-center lg:text-left">
               Re:SILK pieces are not mass-produced, which means there is no fixed
               price. Each set is priced individually based on the silk, its
               condition, craftsmanship, and finishing.
             </p>
 
-            <p className="text-foreground/70 leading-relaxed max-w-xl text-base md:text-[1.05rem]">
+            <p className="text-foreground/70 leading-relaxed max-w-xl text-base md:text-[1.05rem] mx-auto lg:mx-0 text-center lg:text-left">
               Every piece includes a silk sleep mask paired with a matching
               elastic scrunchie — carefully assembled from reclaimed materials.
             </p>
 
-            <ul className="space-y-4">
+            <ul className="space-y-4 max-w-xl mx-auto lg:mx-0">
               {priceFacts.map((fact, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <div className="mt-1 w-5 h-5 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
@@ -60,14 +60,18 @@ const Pricing = () => {
               ))}
             </ul>
 
-            <div className="pt-6">
-              <p className="text-sm text-foreground/60 mb-4">
+            <div className="pt-6 text-center lg:text-left">
+              <p className="text-sm text-foreground/60 mb-4 max-w-xl mx-auto lg:mx-0">
                 To check availability and receive the current price, please
                 contact us directly.
               </p>
 
-              <Button size="lg" onClick={scrollToContact} className="w-auto px-10">
-                Ask for price & availability
+              <Button
+                size="lg"
+                onClick={scrollToContact}
+                className="px-10 w-full max-w-[340px] mx-auto lg:mx-0 lg:w-auto"
+              >
+                Ask for price &amp; availability
               </Button>
             </div>
           </div>
@@ -75,20 +79,21 @@ const Pricing = () => {
           {/* IMAGE */}
           <div className="relative">
             <div className="bg-card border border-border/50 p-8">
-              {/* ТОЛЬКО БЕЖЕВАЯ РАМКА (без салатового фона) */}
+              {/* только бежевая рамка */}
               <div className="border-[2.5px] border-gold/40 p-2">
-                <div className="overflow-hidden">
-                  <img
-                    src={featuredImg}
-                    alt="Re:SILK — silk sleep mask with matching scrunchie"
-                    className="
-                      w-full
-                      h-[270px] sm:h-[340px] lg:h-[320px]
-                      object-cover
-                      object-[60%_95%]
-                    "
-                    draggable={false}
-                  />
+                {/* фиксируем кадр одинаково на всех экранах */}
+                <div className="relative overflow-hidden bg-background">
+                  <div className="w-full aspect-[16/10]">
+                    <img
+                      src={featuredImg}
+                      alt="Re:SILK — silk sleep mask with matching scrunchie"
+                      className="w-full h-full object-cover"
+                      // КАДР (под твой референс): видим весь коричневый сет.
+                      // Если нужно микро-довернуть — меняй проценты, но принцип сохранится на всех экранах.
+                      style={{ objectPosition: "50% 95%" }}
+                      draggable={false}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -106,9 +111,7 @@ const Pricing = () => {
                 </p>
 
                 <div className="pt-4 border-t border-border/50">
-                  <p className="text-primary font-serif text-xl">
-                    Price on request
-                  </p>
+                  <p className="text-primary font-serif text-xl">Price on request</p>
                 </div>
               </div>
             </div>
