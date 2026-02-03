@@ -57,7 +57,7 @@ function Stars({ rating }: { rating: number }) {
       )}
 
       {Array.from({ length: empty }).map((_, i) => (
-        <Star key={`e-${i}`} className="h-4 w-4 text-primary/40" />
+        <Star key={`e-${i}`} className="h-4 w-4 text-primary/30" />
       ))}
     </div>
   );
@@ -65,35 +65,69 @@ function Stars({ rating }: { rating: number }) {
 
 const Reviews = () => {
   return (
-    <section id="reviews" className="py-20 bg-foreground text-background">
+    <section
+      id="reviews"
+      className="
+        py-20
+        bg-silk-charcoal
+        text-background
+      "
+    >
       <div className="container mx-auto px-6">
+        {/* Header (чтобы блок не начинался “в лоб”) */}
+        <div className="mb-10 text-center">
+          <p className="text-gold uppercase tracking-[0.3em] text-sm">
+            Reviews
+          </p>
+          <h2 className="mt-3 text-3xl md:text-4xl font-serif font-light text-background">
+            Loved by those who choose meaning
+          </h2>
+        </div>
+
         {/* Reviews */}
         <div className="grid md:grid-cols-3 gap-6">
           {reviews.map((r) => (
             <div
               key={r.name}
-              className="bg-background text-foreground p-8 border border-border/50"
+              className="
+                bg-background
+                text-foreground
+                p-8 md:p-9
+                border border-border/40
+                shadow-[0_1px_0_rgba(0,0,0,0.03)]
+              "
             >
               <Stars rating={r.rating} />
 
-              <p className="mt-4 text-sm md:text-base text-muted-foreground leading-relaxed">
+              <p
+                className="
+                  mt-5
+                  text-[15px] md:text-base
+                  leading-7 md:leading-8
+                  text-foreground/80
+                "
+              >
                 “{r.text}”
               </p>
 
-              <div className="mt-6">
-                <p className="font-serif text-lg">{r.name}</p>
-                <p className="text-sm text-muted-foreground">{r.role}</p>
+              <div className="mt-7 pt-6 border-t border-border/40">
+                <p className="font-serif text-lg leading-none">{r.name}</p>
+                <p className="mt-2 text-sm text-foreground/60">{r.role}</p>
               </div>
             </div>
           ))}
         </div>
 
         {/* Trust section */}
-        <div className="mt-14 grid md:grid-cols-3 gap-8 text-center">
+        <div className="mt-16 grid md:grid-cols-3 gap-10 text-center">
           {trustItems.map((it) => (
-            <div key={it.title} className="px-4">
-              <p className="text-lg font-serif text-background">{it.title}</p>
-              <p className="mt-2 text-sm text-background/70">{it.text}</p>
+            <div key={it.title} className="px-2">
+              <p className="text-sm text-gold uppercase tracking-[0.3em]">
+                {it.title}
+              </p>
+              <p className="mt-4 text-base md:text-[17px] leading-7 text-background/75 max-w-sm mx-auto">
+                {it.text}
+              </p>
             </div>
           ))}
         </div>
