@@ -68,12 +68,15 @@ const About = () => {
                 </p>
               </div>
 
-              <div className="border-l-2 border-gold pl-4 text-left">
-                <p className="text-2xl font-serif text-background">Re:SILK</p>
-                <p className="text-sm text-background/70 whitespace-nowrap">
-                  Made consciously in Ukraine
-                </p>
-              </div>
+              <div className="border-l-2 border-gold pl-4">
+  <p className="text-2xl font-serif text-background">
+    Re:SILK
+  </p>
+  <p className="text-sm text-background/70 leading-snug">
+    Made consciously
+    <span className="block sm:inline"> in Ukraine</span>
+  </p>
+</div>
             </div>
           </div>
         </div>
