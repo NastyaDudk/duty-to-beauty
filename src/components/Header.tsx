@@ -27,7 +27,7 @@ const Header = () => {
   const closeMenu = () => setIsOpen(false);
   const toggleMenu = () => setIsOpen((v) => !v);
 
-  // ✅ lock body scroll when mobile menu open
+  // lock body scroll when mobile menu open
   useEffect(() => {
     if (!isOpen) return;
     const prev = document.body.style.overflow;
@@ -37,7 +37,7 @@ const Header = () => {
     };
   }, [isOpen]);
 
-  // ✅ close on ESC
+  // close on ESC
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") closeMenu();
@@ -67,23 +67,23 @@ const Header = () => {
     }
   };
 
-  const linkClass =
-    "uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground transition-colors duration-300";
-
-  // ✅ logo must be in /public/logo.png (transparent PNG)
   const logoSrc = `${import.meta.env.BASE_URL}logo.png`;
+
+  const linkClass =
+    "uppercase tracking-[0.18em] transition-opacity duration-300 hover:opacity-80";
 
   return (
     <>
       {/* TOP BAR */}
       <header className="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-md border-b border-black/5">
         <div className="container mx-auto px-6">
-          <div className="flex h-[76px] items-center justify-between">
+          {/* ✅ grid: лого слева, меню строго по центру, бургер справа */}
+          <div className="grid grid-cols-[auto_1fr_auto] items-center h-[76px]">
             {/* LOGO */}
             <button
               type="button"
               onClick={() => go("#contact")}
-              className="flex items-center gap-4 group"
+              className="flex items-center gap-4 group justify-self-start"
               aria-label="Go to contact"
             >
               <img
@@ -94,14 +94,12 @@ const Header = () => {
               />
 
               <span className="text-[28px] font-serif tracking-[0.35em] text-foreground leading-none">
-                SILK
-                <span style={{ color: FOREST }}>4</span>
-                ME
+                SILK<span style={{ color: FOREST }}>4</span>ME
               </span>
             </button>
 
-            {/* DESKTOP NAV */}
-            <nav className="hidden md:flex items-center gap-10">
+            {/* DESKTOP NAV — по центру */}
+            <nav className="hidden md:flex justify-center gap-11">
               {navItems.map((item) =>
                 item.external ? (
                   <a
@@ -109,7 +107,8 @@ const Header = () => {
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`text-sm ${linkClass}`}
+                    className={`text-[13.5px] ${linkClass}`}
+                    style={{ color: FOREST }}
                   >
                     {item.label}
                   </a>
@@ -118,7 +117,8 @@ const Header = () => {
                     key={item.label}
                     type="button"
                     onClick={() => go(item)}
-                    className={`text-sm ${linkClass}`}
+                    className={`text-[13.5px] ${linkClass}`}
+                    style={{ color: FOREST }}
                   >
                     {item.label}
                   </button>
@@ -129,12 +129,13 @@ const Header = () => {
             {/* MOBILE TOGGLE */}
             <button
               type="button"
-              className="md:hidden text-foreground"
+              className="md:hidden justify-self-end"
               onClick={toggleMenu}
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
+              style={{ color: FOREST }}
             >
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
+              {isOpen ? <X size={30} /> : <Menu size={30} />}
             </button>
           </div>
         </div>
@@ -161,9 +162,9 @@ const Header = () => {
               type="button"
               onClick={closeMenu}
               aria-label="Close menu"
-              className="text-foreground"
+              style={{ color: FOREST }}
             >
-              <X size={30} />
+              <X size={32} />
             </button>
           </div>
 
@@ -177,7 +178,8 @@ const Header = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={closeMenu}
-                  className="text-xl uppercase tracking-[0.35em] text-muted-foreground hover:text-foreground transition-colors"
+                  className={`text-[18px] ${linkClass}`}
+                  style={{ color: FOREST, letterSpacing: "0.35em" }}
                 >
                   {item.label}
                 </a>
@@ -186,7 +188,8 @@ const Header = () => {
                   key={item.label}
                   type="button"
                   onClick={() => go(item)}
-                  className="text-xl uppercase tracking-[0.35em] text-muted-foreground hover:text-foreground transition-colors"
+                  className={`text-[18px] ${linkClass}`}
+                  style={{ color: FOREST, letterSpacing: "0.35em" }}
                 >
                   {item.label}
                 </button>

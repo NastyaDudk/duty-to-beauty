@@ -5,7 +5,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Send, MapPin, Instagram, Mail } from "lucide-react";
 
-// Local -> localhost, Production -> Render
 const isLocal =
   typeof window !== "undefined" &&
   (window.location.hostname === "localhost" ||
@@ -17,15 +16,7 @@ const DEFAULT_API = isLocal
 
 const API_URL = import.meta.env.VITE_API_URL || DEFAULT_API;
 
-// IMPORTANT: case-sensitive on GitHub Pages!
 const lifestyleImg = `${import.meta.env.BASE_URL}color8.jpg`;
-
-type LeadPayload = {
-  name: string;
-  phone: string;
-  message?: string;
-  source?: string;
-};
 
 const SOURCE_TAG = "re:silk";
 
@@ -35,19 +26,11 @@ export default function Contact() {
 
   const email = useMemo(() => "Silkandnature" + "@gmail.com", []);
 
-  // ✅ PREWARM: прогреваем Render сразу при заходе на страницу
-  // (после этого отправка обычно становится быстрее)
   useEffect(() => {
     if (isLocal) return;
-
-    // Лёгкий запрос без тела — просто “разбудить” сервер
-    fetch(API_URL, {
-      method: "OPTIONS",
-      cache: "no-store",
-      mode: "cors",
-    }).catch(() => {
-      // игнорируем ошибки прогрева
-    });
+    fetch(API_URL, { method: "OPTIONS", cache: "no-store", mode: "cors" }).catch(
+      () => {}
+    );
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -63,13 +46,10 @@ export default function Contact() {
       return;
     }
 
-    // ✅ чтобы в Telegram точно было видно, что это re:silk
-    const messageWithSource = message ? `[${SOURCE_TAG}] ${message}` : `[${SOURCE_TAG}]`;
-
-    const payload: LeadPayload = {
+    const payload = {
       name,
       phone,
-      ...(messageWithSource ? { message: messageWithSource } : {}),
+      message: message ? `[${SOURCE_TAG}] ${message}` : `[${SOURCE_TAG}]`,
       source: SOURCE_TAG,
     };
 
@@ -84,32 +64,29 @@ export default function Contact() {
         cache: "no-store",
       });
 
-      // ✅ Как на укр лендинге: считаем успехом любой 2xx
       if (!res.ok) {
-        const raw = await res.text().catch(() => "");
-        console.error("Lead submit error:", res.status, raw);
         toast.error("Couldn’t send your request. Please try again.");
         return;
       }
 
       toast.success("✅ Sent! We’ll get back to you shortly.");
       setFormData({ name: "", phone: "", message: "" });
-    } catch (err) {
-      console.error(err);
-      toast.error("Connection error. Please check the server / Render.");
+    } catch {
+      toast.error("Connection error. Please try again later.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <section id="contact" className="py-24 bg-silk-charcoal">
+    <section id="contact" className="py-28 bg-silk-charcoal">
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-16">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* LEFT */}
-          <div className="flex flex-col justify-between h-full space-y-8">
-            <div className="space-y-4">
-              <p className="text-gold uppercase tracking-[0.3em] text-sm">
+          <div className="flex flex-col justify-between h-full space-y-10">
+            {/* HEAD */}
+            <div className="space-y-4 text-center lg:text-left">
+              <p className="text-gold uppercase tracking-[0.35em] text-sm">
                 Contact
               </p>
 
@@ -118,8 +95,12 @@ export default function Contact() {
               </h2>
             </div>
 
-            {/* ✅ noValidate — чтобы не было браузерных подсказок */}
-            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+            {/* FORM */}
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-6 max-w-xl mx-auto lg:mx-0"
+              noValidate
+            >
               <div className="grid md:grid-cols-2 gap-4">
                 <Input
                   placeholder="Your name"
@@ -127,69 +108,77 @@ export default function Contact() {
                   onChange={(e) =>
                     setFormData((p) => ({ ...p, name: e.target.value }))
                   }
-                  className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground h-12"
+                  className="bg-background text-foreground border-border/50 focus:border-gold h-12"
                 />
 
                 <Input
                   type="tel"
-                  inputMode="tel"
                   placeholder="Phone number"
                   value={formData.phone}
                   onChange={(e) =>
                     setFormData((p) => ({ ...p, phone: e.target.value }))
                   }
-                  className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground h-12"
+                  className="bg-background text-foreground border-border/50 focus:border-gold h-12"
                 />
               </div>
 
-              <div className="pt-4">
-                <Textarea
-                  placeholder="Your message (optional)"
-                  value={formData.message}
-                  onChange={(e) =>
-                    setFormData((p) => ({ ...p, message: e.target.value }))
-                  }
-                  className="bg-background text-foreground border-border/50 focus:border-gold placeholder:text-muted-foreground min-h-[160px] resize-none"
-                />
-              </div>
+              <Textarea
+                placeholder="Your message (optional)"
+                value={formData.message}
+                onChange={(e) =>
+                  setFormData((p) => ({ ...p, message: e.target.value }))
+                }
+                className="bg-background text-foreground border-border/50 focus:border-gold min-h-[160px] resize-none"
+              />
 
-              <div className="pt-4">
+              {/* CTA */}
+              <div className="pt-6 flex justify-center lg:justify-start">
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full md:w-auto bg-gold text-accent-foreground hover:bg-gold-light border border-gold hover:border-gold-light"
+                  className="
+                    relative overflow-hidden
+                    px-14 py-6 text-base font-medium
+                    bg-gradient-to-r from-gold to-gold-light
+                    text-accent-foreground
+                    shadow-[0_10px_30px_rgba(212,175,55,0.35)]
+                    hover:shadow-[0_14px_40px_rgba(212,175,55,0.45)]
+                    hover:-translate-y-[1px]
+                    active:translate-y-0
+                    transition-all duration-300
+                  "
                 >
                   {isSubmitting ? "Sending..." : "Send request"}
-                  <Send className="w-4 h-4 ml-2" />
+                  <Send className="w-4 h-4 ml-3" />
                 </Button>
               </div>
             </form>
 
             {/* INFO */}
-            <div className="flex flex-col items-center text-center gap-6 pt-8 md:flex-row md:flex-wrap md:items-center md:text-left md:gap-10">
+            <div className="flex flex-col items-center gap-6 pt-10 text-center md:flex-row md:justify-start md:text-left md:gap-10">
               <a
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 group cursor-pointer"
+                className="flex items-center gap-3 group"
               >
                 <Instagram className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
-                <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
+                <span className="text-sm text-background/80 group-hover:text-gold-light">
                   Message us on Instagram
                 </span>
               </a>
 
               <a
                 href={`mailto:${email}`}
-                className="flex items-center gap-3 group cursor-pointer"
+                className="flex items-center gap-3 group"
               >
                 <Mail className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
-                <span className="text-sm text-background/80 group-hover:text-gold-light transition-colors">
+                <span className="text-sm text-background/80 group-hover:text-gold-light">
                   Email us
                 </span>
               </a>
 
-              <div className="flex items-center gap-3 cursor-default">
+              <div className="flex items-center gap-3">
                 <MapPin className="w-5 h-5 text-gold" />
                 <span className="text-sm text-background/80">
                   Ukraine / Europe
