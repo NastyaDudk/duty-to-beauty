@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Duty to Beauty</title>
+  <meta name="robots" content="noindex" />
+
+  <script>
+    (function () {
+      var base = "/duty-to-beauty/";
+      var path = window.location.pathname;
+
+      // Если запрос НЕ в пределах /duty-to-beauty/ — ничего не делаем
+      if (!path.startsWith(base)) return;
+
+      // Если это файл (есть расширение) — не редиректим
+      // .xml .txt .ico .png .webmanifest .css .js .map и т.д.
+      var last = path.split("/").pop() || "";
+      if (last.includes(".") && !last.endsWith(".")) return;
+
+      // SPA redirect
+      if (path !== base) {
+        window.location.replace(base);
+      }
+    })();
+  </script>
+</head>
+
+<body></body>
+
+</html>
