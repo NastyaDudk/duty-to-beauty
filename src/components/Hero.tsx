@@ -33,16 +33,26 @@ const Hero = () => {
       <div className="container mx-auto px-6 relative z-10">
         {/* GRID — растягиваем по высоте */}
         <div className="grid lg:grid-cols-2 gap-14 items-stretch">
-
           {/* LEFT */}
           <div className="flex flex-col animate-fade-in">
             {/* TEXT */}
             <div className="space-y-7">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-medium text-foreground">
+              <h1
+                className="
+                  font-serif font-medium text-foreground
+                  text-4xl sm:text-5xl md:text-6xl lg:text-7xl
+                  leading-[1.05]
+                "
+              >
                 Re:SILK
               </h1>
 
-              <p className="text-muted-foreground text-xl leading-relaxed max-w-xl whitespace-pre-line">
+              <p
+                className="
+                  text-muted-foreground leading-relaxed max-w-xl whitespace-pre-line
+                  text-base sm:text-lg lg:text-xl
+                "
+              >
 {`Re:SILK is a new chapter of silk.
 
 A collection of sleep masks with elastic straps,
@@ -55,24 +65,38 @@ your skin, and your hair.
 Upcycled. Thoughtful. Limited.`}
               </p>
 
-              <div className="flex flex-wrap items-center gap-4 pt-2">
-                <span className="text-sm tracking-[0.25em] uppercase">
+              <div
+                className="
+                  flex flex-wrap gap-4 pt-2
+                  items-center
+                  justify-center text-center
+                  sm:justify-start sm:text-left
+                "
+              >
+                <span className="text-xs sm:text-sm tracking-[0.25em] uppercase">
                   New collection
                 </span>
 
-                <span className="rounded-lg border border-primary/40 bg-primary/10 px-5 py-2 text-sm font-semibold tracking-[0.3em] uppercase text-primary">
+                <span className="rounded-lg border border-primary/40 bg-primary/10 px-5 py-2 text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase text-primary">
                   Upcycled ties
                 </span>
               </div>
             </div>
 
             {/* BUTTONS — ЯКОРЬ НИЗА */}
-            <div className="mt-auto pt-10 flex gap-4">
+            <div
+              className="
+                mt-10 sm:mt-auto
+                pt-8 sm:pt-10
+                flex flex-col gap-4
+                sm:flex-row sm:items-start
+              "
+            >
               <Button
                 variant="luxury"
                 size="lg"
                 onClick={scrollToContact}
-                className="w-[300px]"
+                className="w-full sm:w-[300px]"
               >
                 Check availability
               </Button>
@@ -81,7 +105,7 @@ Upcycled. Thoughtful. Limited.`}
                 variant="luxuryOutline"
                 size="lg"
                 onClick={goToCollection}
-                className="w-[300px]"
+                className="w-full sm:w-[300px]"
               >
                 Reserve your piece
               </Button>
@@ -95,12 +119,12 @@ Upcycled. Thoughtful. Limited.`}
               <div className="border-[2.5px] border-border/70 p-[6px]">
                 <div className="relative overflow-hidden">
                   <img
-  src={heroImg}
-  alt="Re:SILK — upcycled silk sleep mask with scrunchie strap"
-  className="w-full h-[600px] object-cover"
-  style={{ objectPosition: "80% 92%" }} // было: "80% bottom"
-  draggable={false}
-/>
+                    src={heroImg}
+                    alt="Re:SILK — upcycled silk sleep mask with scrunchie strap"
+                    className="w-full h-[600px] object-cover"
+                    style={{ objectPosition: "80% 92%" }} // было: "80% bottom"
+                    draggable={false}
+                  />
 
                   <a
                     href={PRODUCT_URL}
