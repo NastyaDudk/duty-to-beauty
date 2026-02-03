@@ -42,6 +42,7 @@ const Hero = () => {
                   font-serif font-medium text-foreground
                   text-4xl sm:text-5xl md:text-6xl lg:text-7xl
                   leading-[1.05]
+                  text-center sm:text-left
                 "
               >
                 Re:SILK
@@ -49,11 +50,14 @@ const Hero = () => {
 
               <p
                 className="
-                  text-muted-foreground leading-relaxed max-w-xl whitespace-pre-line
+                  text-muted-foreground leading-relaxed whitespace-pre-line
                   text-base sm:text-lg lg:text-xl
+                  text-center sm:text-left
+                  mx-auto sm:mx-0
+                  max-w-[420px] sm:max-w-xl
                 "
               >
-{`Re:SILK is a new chapter of silk.
+                {`Re:SILK is a new chapter of silk.
 
 A collection of sleep masks with elastic straps,
 crafted from reclaimed silk neckties.
@@ -89,6 +93,7 @@ Upcycled. Thoughtful. Limited.`}
                 mt-10 sm:mt-auto
                 pt-8 sm:pt-10
                 flex flex-col gap-4
+                items-center
                 sm:flex-row sm:items-start
               "
             >
@@ -96,7 +101,7 @@ Upcycled. Thoughtful. Limited.`}
                 variant="luxury"
                 size="lg"
                 onClick={scrollToContact}
-                className="w-full sm:w-[300px]"
+                className="w-[240px] sm:w-[300px]"
               >
                 Check availability
               </Button>
@@ -105,7 +110,7 @@ Upcycled. Thoughtful. Limited.`}
                 variant="luxuryOutline"
                 size="lg"
                 onClick={goToCollection}
-                className="w-full sm:w-[300px]"
+                className="w-[240px] sm:w-[300px]"
               >
                 Reserve your piece
               </Button>
@@ -122,7 +127,7 @@ Upcycled. Thoughtful. Limited.`}
                     src={heroImg}
                     alt="Re:SILK — upcycled silk sleep mask with scrunchie strap"
                     className="w-full h-[600px] object-cover"
-                    style={{ objectPosition: "80% 92%" }} // было: "80% bottom"
+                    style={{ objectPosition: "80% 92%" }}
                     draggable={false}
                   />
 
