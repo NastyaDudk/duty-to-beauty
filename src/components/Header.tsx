@@ -8,6 +8,7 @@ type NavItem = {
 };
 
 const FOREST = "#1f4c41";
+const HEADER_H = 76;
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -70,26 +71,32 @@ const Header = () => {
   const logoSrc = `${import.meta.env.BASE_URL}logo.png`;
 
   const linkClass =
-    "uppercase tracking-[0.18em] transition-opacity duration-300 hover:opacity-80";
+    "uppercase tracking-[0.22em] transition-opacity duration-300 hover:opacity-80";
 
   return (
     <>
       {/* TOP BAR */}
-      <header className="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-md border-b border-black/5">
-        <div className="container mx-auto px-6">
-          {/* ✅ grid: лого слева, меню строго по центру, бургер справа */}
-          <div className="grid grid-cols-[auto_1fr_auto] items-center h-[76px]">
-            {/* LOGO */}
+      <header
+        className="
+          fixed top-0 inset-x-0 z-50
+          bg-white/75 backdrop-blur-lg
+          border-b border-black/5
+        "
+        style={{ height: HEADER_H }}
+      >
+        <div className="container mx-auto px-6 h-full">
+          <div className="flex items-center h-full">
+            {/* LOGO — слева */}
             <button
               type="button"
               onClick={() => go("#contact")}
-              className="flex items-center gap-4 group justify-self-start"
+              className="flex items-center gap-4 group"
               aria-label="Go to contact"
             >
               <img
                 src={logoSrc}
                 alt="Silk4me logo"
-                className="h-12 w-12 object-contain bg-transparent transition-transform duration-300 group-hover:scale-105"
+                className="h-12 w-12 object-contain transition-transform duration-300 group-hover:scale-105"
                 draggable={false}
               />
 
@@ -98,8 +105,8 @@ const Header = () => {
               </span>
             </button>
 
-            {/* DESKTOP NAV — по центру */}
-            <nav className="hidden md:flex justify-center gap-11">
+            {/* DESKTOP NAV — ПРИЖАТ К ПРАВОМУ КРАЮ */}
+            <nav className="hidden md:flex items-center gap-10 ml-auto">
               {navItems.map((item) =>
                 item.external ? (
                   <a
@@ -107,7 +114,7 @@ const Header = () => {
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`text-[13.5px] ${linkClass}`}
+                    className={`text-[14px] ${linkClass}`}
                     style={{ color: FOREST }}
                   >
                     {item.label}
@@ -117,7 +124,7 @@ const Header = () => {
                     key={item.label}
                     type="button"
                     onClick={() => go(item)}
-                    className={`text-[13.5px] ${linkClass}`}
+                    className={`text-[14px] ${linkClass}`}
                     style={{ color: FOREST }}
                   >
                     {item.label}
@@ -129,7 +136,7 @@ const Header = () => {
             {/* MOBILE TOGGLE */}
             <button
               type="button"
-              className="md:hidden justify-self-end"
+              className="md:hidden ml-auto"
               onClick={toggleMenu}
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
@@ -144,8 +151,10 @@ const Header = () => {
       {/* MOBILE FULLSCREEN MENU */}
       {isOpen && (
         <div className="fixed inset-0 z-[60] bg-white">
-          {/* TOP LINE */}
-          <div className="flex items-center justify-between px-6 h-[76px] border-b border-black/5">
+          <div
+            className="flex items-center justify-between px-6 border-b border-black/5"
+            style={{ height: HEADER_H }}
+          >
             <div className="flex items-center gap-3">
               <img
                 src={logoSrc}
@@ -168,33 +177,37 @@ const Header = () => {
             </button>
           </div>
 
-          {/* CENTER MENU */}
-          <nav className="h-[calc(100vh-76px)] flex flex-col items-center justify-center gap-10 px-6 text-center">
-            {navItems.map((item) =>
-              item.external ? (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={closeMenu}
-                  className={`text-[18px] ${linkClass}`}
-                  style={{ color: FOREST, letterSpacing: "0.35em" }}
-                >
-                  {item.label}
-                </a>
-              ) : (
-                <button
-                  key={item.label}
-                  type="button"
-                  onClick={() => go(item)}
-                  className={`text-[18px] ${linkClass}`}
-                  style={{ color: FOREST, letterSpacing: "0.35em" }}
-                >
-                  {item.label}
-                </button>
-              )
-            )}
+          <nav
+            className="flex flex-col items-center justify-center px-6 text-center"
+            style={{ height: `calc(100vh - ${HEADER_H}px)` }}
+          >
+            <div className="flex flex-col gap-10">
+              {navItems.map((item) =>
+                item.external ? (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={closeMenu}
+                    className="text-[18px] uppercase transition-opacity duration-300 hover:opacity-80"
+                    style={{ color: FOREST, letterSpacing: "0.35em" }}
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <button
+                    key={item.label}
+                    type="button"
+                    onClick={() => go(item)}
+                    className="text-[18px] uppercase transition-opacity duration-300 hover:opacity-80"
+                    style={{ color: FOREST, letterSpacing: "0.35em" }}
+                  >
+                    {item.label}
+                  </button>
+                )
+              )}
+            </div>
           </nav>
         </div>
       )}

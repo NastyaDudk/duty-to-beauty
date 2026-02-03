@@ -15,43 +15,28 @@ const DEFAULT_API = isLocal
   : "https://silk4me.onrender.com/api/lead";
 
 const API_URL = import.meta.env.VITE_API_URL || DEFAULT_API;
-
 const lifestyleImg = `${import.meta.env.BASE_URL}color8.jpg`;
-
 const SOURCE_TAG = "re:silk";
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: "", phone: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const email = useMemo(() => "Silkandnature" + "@gmail.com", []);
+  const email = useMemo(() => "Silkandnature@gmail.com", []);
 
   useEffect(() => {
     if (isLocal) return;
-    fetch(API_URL, { method: "OPTIONS", cache: "no-store", mode: "cors" }).catch(
-      () => {}
-    );
+    fetch(API_URL, { method: "OPTIONS", mode: "cors" }).catch(() => {});
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
 
-    const name = formData.name.trim();
-    const phone = formData.phone.trim();
-    const message = formData.message.trim();
-
-    if (!name || !phone) {
+    if (!formData.name.trim() || !formData.phone.trim()) {
       toast.error("Please fill in your name and phone number.");
       return;
     }
-
-    const payload = {
-      name,
-      phone,
-      message: message ? `[${SOURCE_TAG}] ${message}` : `[${SOURCE_TAG}]`,
-      source: SOURCE_TAG,
-    };
 
     setIsSubmitting(true);
 
@@ -59,34 +44,50 @@ export default function Contact() {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        mode: "cors",
-        cache: "no-store",
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          message: formData.message
+            ? `[${SOURCE_TAG}] ${formData.message}`
+            : `[${SOURCE_TAG}]`,
+          source: SOURCE_TAG,
+        }),
       });
 
-      if (!res.ok) {
-        toast.error("Couldn’t send your request. Please try again.");
-        return;
-      }
-
+      if (!res.ok) throw new Error();
       toast.success("✅ Sent! We’ll get back to you shortly.");
       setFormData({ name: "", phone: "", message: "" });
     } catch {
-      toast.error("Connection error. Please try again later.");
+      toast.error("Couldn’t send your request. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <section id="contact" className="py-28 bg-silk-charcoal">
+   <section
+  id="contact"
+  className="
+    bg-silk-charcoal
+    pt-16 sm:pt-20 lg:pt-24
+    pb-28
+  "
+>
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
+
           {/* LEFT */}
-          <div className="flex flex-col justify-between h-full space-y-10">
+          <div className="flex flex-col">
+
             {/* HEAD */}
-            <div className="space-y-4 text-center lg:text-left">
-              <p className="text-gold uppercase tracking-[0.35em] text-sm">
+            <div
+              className="
+                text-center lg:text-left
+                mb-10
+                -mt-6 sm:-mt-4 lg:mt-0
+              "
+            >
+              <p className="text-gold uppercase tracking-[0.35em] text-sm mb-3">
                 Contact
               </p>
 
@@ -96,11 +97,18 @@ export default function Contact() {
             </div>
 
             {/* FORM */}
-            <form
-              onSubmit={handleSubmit}
-              className="space-y-6 max-w-xl mx-auto lg:mx-0"
-              noValidate
-            >
+           <form
+  onSubmit={handleSubmit}
+  className="
+    space-y-6
+    w-full
+    max-w-none
+    sm:max-w-xl
+    mx-auto
+    lg:mx-0
+  "
+  noValidate
+>
               <div className="grid md:grid-cols-2 gap-4">
                 <Input
                   placeholder="Your name"
@@ -108,7 +116,16 @@ export default function Contact() {
                   onChange={(e) =>
                     setFormData((p) => ({ ...p, name: e.target.value }))
                   }
-                  className="bg-background text-foreground border-border/50 focus:border-gold h-12"
+                  className="
+                    h-14 sm:h-12
+                    px-6
+                    text-base
+                    bg-background
+                    placeholder:text-base
+                    placeholder:text-muted-foreground
+                    border-border/50
+                    focus:border-gold
+                  "
                 />
 
                 <Input
@@ -118,7 +135,16 @@ export default function Contact() {
                   onChange={(e) =>
                     setFormData((p) => ({ ...p, phone: e.target.value }))
                   }
-                  className="bg-background text-foreground border-border/50 focus:border-gold h-12"
+                  className="
+                    h-14 sm:h-12
+                    px-6
+                    text-base
+                    bg-background
+                    placeholder:text-base
+                    placeholder:text-muted-foreground
+                    border-border/50
+                    focus:border-gold
+                  "
                 />
               </div>
 
@@ -128,23 +154,32 @@ export default function Contact() {
                 onChange={(e) =>
                   setFormData((p) => ({ ...p, message: e.target.value }))
                 }
-                className="bg-background text-foreground border-border/50 focus:border-gold min-h-[160px] resize-none"
+                className="
+                  min-h-[180px]
+                  px-6 py-4
+                  text-base
+                  bg-background
+                  placeholder:text-base
+                  placeholder:text-muted-foreground
+                  border-border/50
+                  focus:border-gold
+                  resize-none
+                "
               />
 
               {/* CTA */}
-              <div className="pt-6 flex justify-center lg:justify-start">
+              <div className="pt-8 flex justify-center lg:justify-start">
                 <Button
                   type="submit"
                   disabled={isSubmitting}
                   className="
-                    relative overflow-hidden
-                    px-14 py-6 text-base font-medium
+                    px-16 py-6
+                    text-base font-medium
                     bg-gradient-to-r from-gold to-gold-light
                     text-accent-foreground
                     shadow-[0_10px_30px_rgba(212,175,55,0.35)]
                     hover:shadow-[0_14px_40px_rgba(212,175,55,0.45)]
                     hover:-translate-y-[1px]
-                    active:translate-y-0
                     transition-all duration-300
                   "
                 >
@@ -155,14 +190,14 @@ export default function Contact() {
             </form>
 
             {/* INFO */}
-            <div className="flex flex-col items-center gap-6 pt-10 text-center md:flex-row md:justify-start md:text-left md:gap-10">
+            <div className="flex flex-col items-center gap-6 pt-12 text-center md:flex-row md:justify-start md:text-left md:gap-10">
               <a
                 href="https://www.instagram.com/silk4me"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 group"
               >
-                <Instagram className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
+                <Instagram className="w-5 h-5 text-gold group-hover:text-gold-light" />
                 <span className="text-sm text-background/80 group-hover:text-gold-light">
                   Message us on Instagram
                 </span>
@@ -172,7 +207,7 @@ export default function Contact() {
                 href={`mailto:${email}`}
                 className="flex items-center gap-3 group"
               >
-                <Mail className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
+                <Mail className="w-5 h-5 text-gold group-hover:text-gold-light" />
                 <span className="text-sm text-background/80 group-hover:text-gold-light">
                   Email us
                 </span>
