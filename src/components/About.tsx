@@ -4,23 +4,17 @@ const About = () => {
   return (
     <section id="about" className="bg-silk-charcoal pt-24 pb-28">
       <div className="container mx-auto px-6">
-        {/* items-start — идеальное выравнивание по верху */}
         <div className="grid lg:grid-cols-2 gap-16 items-start">
-
           {/* IMAGE */}
-          <div className="relative">
-            {/* аккуратная рамка, без absolute */}
-            <div className="border-[2.5px] border-gold/50 p-2">
+          <div className="flex justify-center lg:justify-start">
+            <div className="border-[2.5px] border-gold/50 p-2 w-full max-w-[560px]">
               <img
                 src={collectionImg}
                 alt="Re:SILK — reclaimed silk neckties reworked into sleep accessories"
                 className="
-                  block
-                  w-full
-                  h-[520px]
-                  lg:h-[600px]
-                  object-cover
-                  object-[50%_55%]
+                  block w-full
+                  h-[420px] sm:h-[520px] lg:h-[600px]
+                  object-cover object-[50%_55%]
                 "
                 draggable={false}
               />
@@ -28,10 +22,9 @@ const About = () => {
           </div>
 
           {/* CONTENT */}
-          <div className="flex flex-col">
-
+          <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
             {/* Headings */}
-            <div className="mb-10">
+            <div className="mb-10 w-full max-w-xl">
               <p className="text-gold uppercase tracking-[0.3em] text-sm mb-4">
                 About the collection
               </p>
@@ -64,9 +57,9 @@ const About = () => {
               </p>
             </div>
 
-            {/* FACTS — опущены ниже, спокойный финал блока */}
-            <div className="mt-11 grid grid-cols-2 gap-10">
-              <div className="border-l-2 border-gold pl-4">
+            {/* FACTS — в одну строку даже на мобилке */}
+            <div className="mt-12 grid grid-cols-2 gap-6 max-w-xl w-full">
+              <div className="border-l-2 border-gold pl-4 text-left">
                 <p className="text-2xl font-serif text-background">
                   Mulberry silk
                 </p>
@@ -75,16 +68,13 @@ const About = () => {
                 </p>
               </div>
 
-              <div className="border-l-2 border-gold pl-4">
-                <p className="text-2xl font-serif text-background">
-                  Re:SILK
-                </p>
+              <div className="border-l-2 border-gold pl-4 text-left">
+                <p className="text-2xl font-serif text-background">Re:SILK</p>
                 <p className="text-sm text-background/70 whitespace-nowrap">
                   Made consciously in Ukraine
                 </p>
               </div>
             </div>
-
           </div>
         </div>
       </div>

@@ -17,7 +17,6 @@ const Pricing = () => {
     });
   };
 
-  // image from /public
   const featuredImg = `${import.meta.env.BASE_URL}tiemask.jpg`;
 
   return (
@@ -31,19 +30,19 @@ const Pricing = () => {
                 Pricing
               </p>
 
-              <h2 className="text-3xl md:text-4xl font-serif font-light text-foreground">
+              <h2 className="text-3xl md:text-4xl font-serif font-light text-foreground leading-tight">
                 Thoughtful pricing for a{" "}
                 <span className="text-primary">limited collection</span>
               </h2>
             </div>
 
-            <p className="text-muted-foreground leading-relaxed max-w-xl">
+            <p className="text-foreground/70 leading-relaxed max-w-xl text-base md:text-[1.05rem]">
               Re:SILK pieces are not mass-produced, which means there is no fixed
               price. Each set is priced individually based on the silk, its
               condition, craftsmanship, and finishing.
             </p>
 
-            <p className="text-muted-foreground leading-relaxed max-w-xl">
+            <p className="text-foreground/70 leading-relaxed max-w-xl text-base md:text-[1.05rem]">
               Every piece includes a silk sleep mask paired with a matching
               elastic scrunchie — carefully assembled from reclaimed materials.
             </p>
@@ -54,22 +53,20 @@ const Pricing = () => {
                   <div className="mt-1 w-5 h-5 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
                     <Check className="w-3 h-3 text-primary" />
                   </div>
-                  <span className="text-foreground">{fact}</span>
+                  <span className="text-foreground/80 leading-relaxed">
+                    {fact}
+                  </span>
                 </li>
               ))}
             </ul>
 
             <div className="pt-6">
-              <p className="text-sm text-muted-foreground mb-4">
+              <p className="text-sm text-foreground/60 mb-4">
                 To check availability and receive the current price, please
                 contact us directly.
               </p>
 
-              <Button
-                size="lg"
-                onClick={scrollToContact}
-                className="w-auto px-10"
-              >
+              <Button size="lg" onClick={scrollToContact} className="w-auto px-10">
                 Ask for price & availability
               </Button>
             </div>
@@ -78,26 +75,33 @@ const Pricing = () => {
           {/* IMAGE */}
           <div className="relative">
             <div className="bg-card border border-border/50 p-8">
-              <div className="bg-background p-6 mb-6">
-                <img
-                  src={featuredImg}
-                  alt="Re:SILK — silk sleep mask with matching scrunchie"
-                  className="w-full h-[360px] object-cover"
-                  style={{ objectPosition: "left bottom" }}
-                  draggable={false}
-                />
+              {/* ТОЛЬКО БЕЖЕВАЯ РАМКА (без салатового фона) */}
+              <div className="border-[2.5px] border-gold/40 p-2">
+                <div className="overflow-hidden">
+                  <img
+                    src={featuredImg}
+                    alt="Re:SILK — silk sleep mask with matching scrunchie"
+                    className="
+                      w-full
+                      h-[270px] sm:h-[340px] lg:h-[320px]
+                      object-cover
+                      object-[60%_95%]
+                    "
+                    draggable={false}
+                  />
+                </div>
               </div>
 
-              <div className="text-center space-y-4">
-                <p className="text-sm text-muted-foreground uppercase tracking-wider">
+              <div className="text-center space-y-4 mt-7">
+                <p className="text-xs tracking-[0.25em] uppercase text-foreground/60">
                   Example set
                 </p>
 
                 <h3 className="text-2xl font-serif text-foreground">
-                  Re:SILK Sleep Mask & Scrunchie
+                  Re:SILK Sleep Mask &amp; Scrunchie
                 </h3>
 
-                <p className="text-muted-foreground text-sm">
+                <p className="text-sm text-foreground/65 leading-relaxed max-w-sm mx-auto">
                   Each set is priced individually — no two are exactly the same.
                 </p>
 
@@ -109,6 +113,7 @@ const Pricing = () => {
               </div>
             </div>
           </div>
+          {/* /IMAGE */}
         </div>
       </div>
     </section>
