@@ -21,65 +21,69 @@ const About = () => {
             </div>
           </div>
 
-          {/* CONTENT — РОВНО ПО РАМКЕ */}
+          {/* CONTENT — aligned to frame on desktop */}
           <div className="lg:h-[636px] flex flex-col justify-between">
             {/* TOP */}
-            <div>
+            <div className="max-w-xl w-full mx-auto lg:mx-0">
               {/* Headings */}
-              <div className="mb-10 max-w-xl">
-                <p className="text-gold uppercase tracking-[0.3em] text-sm mb-3">
+              <div className="text-center lg:text-left">
+                <p className="text-gold uppercase tracking-[0.3em] text-sm">
                   About the drop
                 </p>
 
-                <h2 className="text-3xl md:text-4xl font-serif font-light text-background leading-tight mt-10">
-                  Re:SILK  
-                  <span className="text-gold"> — a new life for silk</span>
+                <h2 className="mt-6 text-3xl md:text-4xl font-serif font-light text-background leading-tight">
+                  Re:SILK <span className="text-gold">— a new life for silk</span>
                 </h2>
               </div>
 
-          {/* Text — ниже и чуть крупнее */}
-<div
-  className="
-    mt-20
-    space-y-6
-    text-background/80
-    text-[1.3rem]
-    leading-[1.8]
-    max-w-xl
-  "
->
-  <p>
-    Rooted in conscious consumption, Re:SILK gives new life to
-    premium silk that once went unworn, partially replacing newly
-    produced material with existing deadstock.
-  </p>
+              {/* Text — closer to heading */}
+              <div
+                className="
+                  mt-8 lg:mt-10
+                  space-y-6
+                  text-background/80
+                  text-[1.12rem] sm:text-[1.18rem] lg:text-[1.22rem]
+                  leading-[1.75]
+                "
+              >
+                <p>
+                  Rooted in conscious consumption, Re:SILK gives new life to
+                  premium silk that once went unworn, partially replacing newly
+                  produced material with existing deadstock.
+                </p>
 
-  <p>
-    Each set includes a silk sleep mask and matching scrunchie.
-    The mask is made entirely of natural silk — inside and out,
-    with silk fiber filling — making it breathable, cool on the
-    skin, and comfortable throughout the night — unlike most
-    masks on the market that use synthetic fillings.
-  </p>
-</div>
+                <p>
+                  Each set includes a silk sleep mask and matching scrunchie.
+                  The mask is made entirely of natural silk — inside and out,
+                  with silk fiber filling — making it breathable, cool on the
+                  skin, and comfortable throughout the night — unlike most
+                  masks on the market that use synthetic fillings.
+                </p>
+              </div>
             </div>
 
-            {/* BOTTOM — ФАКТЫ РОВНО ПО НИЗУ РАМКИ */}
-            <div className="grid grid-cols-2 gap-6 max-w-xl">
+            {/* BOTTOM — facts: a bit lower on mobile, smaller type */}
+            <div
+              className="
+                max-w-xl w-full mx-auto lg:mx-0
+                mt-10 lg:mt-0
+                grid grid-cols-2 gap-6
+              "
+            >
               <div className="border-l-2 border-gold pl-4">
-                <p className="text-2xl font-serif text-background">
+                <p className="text-[1.15rem] sm:text-xl lg:text-2xl font-serif text-background">
                   Mulberry silk
                 </p>
-                <p className="text-sm uppercase tracking-wide text-background/70">
+                <p className="mt-1 text-[0.72rem] sm:text-xs lg:text-sm uppercase tracking-wide text-background/70">
                   Deadstock sourced in Europe
                 </p>
               </div>
 
               <div className="border-l-2 border-gold pl-4">
-                <p className="text-2xl font-serif text-background">
+                <p className="text-[1.15rem] sm:text-xl lg:text-2xl font-serif text-background">
                   Re:SILK
                 </p>
-                <p className="text-sm uppercase tracking-wide text-background/70">
+                <p className="mt-1 text-[0.72rem] sm:text-xs lg:text-sm uppercase tracking-wide text-background/70">
                   Upcycled consciously in Ukraine
                 </p>
               </div>

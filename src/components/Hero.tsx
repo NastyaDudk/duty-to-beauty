@@ -46,12 +46,14 @@ const Hero = () => {
               </h1>
 
               {/* TAGS */}
-              <div
-                className="
-                  flex flex-col items-center gap-2 text-center
-                  sm:flex-row sm:items-center sm:gap-4 sm:text-left
-                "
-              >
+             <div
+  className="
+    flex flex-col items-center gap-2 text-center
+    mt-1
+    sm:mt-0
+    sm:flex-row sm:items-center sm:gap-4 sm:text-left
+  "
+>
                 <span className="text-xs sm:text-sm tracking-[0.25em] uppercase">
                   New collection
                 </span>
@@ -62,17 +64,17 @@ const Hero = () => {
               </div>
 
               {/* TEXT */}
-              <p
-                className="
-                  text-muted-foreground whitespace-pre-line
-                  text-[1.05rem] sm:text-[1.15rem] lg:text-[1.3rem]
-                  leading-[1.65]
-                  text-center sm:text-left
-                  mx-auto sm:mx-0
-                  max-w-[520px] lg:max-w-[600px]
-                  pt-6 sm:pt-10 lg:pt-8
-                "
-              >
+             <p
+  className="
+    text-muted-foreground whitespace-pre-line
+    text-[1.05rem] sm:text-[1.15rem] lg:text-[1.3rem]
+    leading-[1.6]
+    text-center sm:text-left
+    mx-auto sm:mx-0
+    max-w-[520px] lg:max-w-[600px]
+    pt-3 sm:pt-10 lg:pt-8
+  "
+>
 {`Re:SILK is a limited drop of silk sleep mask and scrunchie sets, created from deadstock premium men’s silk ties — reimagined into pieces of calm, care, and conscious living.
 
 Only 50 sets were created, and each one is truly one of a kind.
