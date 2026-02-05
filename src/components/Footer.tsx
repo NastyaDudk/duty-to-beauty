@@ -3,18 +3,26 @@ import { Instagram, Facebook } from "lucide-react";
 const Footer = () => {
   return (
     <footer className="bg-silk-charcoal border-t border-background/10">
-      <div className="container mx-auto px-6 py-12">
+      <div
+        className="
+          container mx-auto px-6
+          py-8 md:py-12
+        "
+      >
         <div
           className="
-            flex flex-col gap-8 text-center
+            flex flex-col items-center text-center
+            gap-6
             md:grid md:grid-cols-3 md:items-center md:text-left
+            md:gap-0
           "
         >
           {/* Logo */}
           <a
             href="#"
             className="
-              text-2xl font-serif tracking-[0.3em]
+              text-xl md:text-2xl
+              font-serif tracking-[0.3em]
               text-background
               md:justify-self-start
             "
@@ -23,16 +31,20 @@ const Footer = () => {
           </a>
 
           {/* Copyright */}
-      <p className="text-sm text-background/70 text-center leading-relaxed">
-  © 2026 Silk4me. All rights reserved.<br />
-  <span className="tracking-wide">Premium silk brand from Ukraine.</span>
-</p>
+          <p className="text-sm text-background/70 leading-relaxed">
+            © 2026 Silk4me. All rights reserved.
+            <br />
+            <span className="tracking-wide">
+              Premium silk brand from Ukraine.
+            </span>
+          </p>
 
           {/* Social Links */}
           <div
             className="
               flex items-center justify-center gap-4
               md:justify-self-end
+              mt-2 md:mt-0
             "
           >
             <a
@@ -40,7 +52,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="
-                w-10 h-10
+                w-9 h-9 md:w-10 md:h-10
                 border border-background/30
                 flex items-center justify-center
                 text-background/70
@@ -57,7 +69,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="
-                w-10 h-10
+                w-9 h-9 md:w-10 md:h-10
                 border border-background/30
                 flex items-center justify-center
                 text-background/70

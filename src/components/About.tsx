@@ -21,7 +21,7 @@ const About = () => {
             </div>
           </div>
 
-          {/* CONTENT — aligned to frame on desktop */}
+          {/* CONTENT */}
           <div className="lg:h-[636px] flex flex-col justify-between">
             {/* TOP */}
             <div className="max-w-xl w-full mx-auto lg:mx-0">
@@ -32,11 +32,12 @@ const About = () => {
                 </p>
 
                 <h2 className="mt-6 text-3xl md:text-4xl font-serif font-light text-background leading-tight">
-                  Re:SILK <span className="text-gold">— a new life for silk</span>
+                  Re:SILK{" "}
+                  <span className="text-gold">— a new life for silk</span>
                 </h2>
               </div>
 
-              {/* Text — closer to heading */}
+              {/* Text */}
               <div
                 className="
                   mt-8 lg:mt-10
@@ -62,28 +63,28 @@ const About = () => {
               </div>
             </div>
 
-            {/* BOTTOM — facts: a bit lower on mobile, smaller type */}
+            {/* FACTS — mobile: 2 rows, desktop: 2 columns */}
             <div
               className="
                 max-w-xl w-full mx-auto lg:mx-0
-                mt-10 lg:mt-0
-                grid grid-cols-2 gap-6
+                mt-12 lg:mt-0
+                grid grid-cols-1 sm:grid-cols-2 gap-6
               "
             >
               <div className="border-l-2 border-gold pl-4">
-                <p className="text-[1.15rem] sm:text-xl lg:text-2xl font-serif text-background">
+                <p className="text-[1.1rem] sm:text-xl lg:text-2xl font-serif text-background">
                   Mulberry silk
                 </p>
-                <p className="mt-1 text-[0.72rem] sm:text-xs lg:text-sm uppercase tracking-wide text-background/70">
+                <p className="mt-1 text-[0.7rem] sm:text-xs lg:text-sm uppercase tracking-wide text-background/70">
                   Deadstock sourced in Europe
                 </p>
               </div>
 
               <div className="border-l-2 border-gold pl-4">
-                <p className="text-[1.15rem] sm:text-xl lg:text-2xl font-serif text-background">
+                <p className="text-[1.1rem] sm:text-xl lg:text-2xl font-serif text-background">
                   Re:SILK
                 </p>
-                <p className="mt-1 text-[0.72rem] sm:text-xs lg:text-sm uppercase tracking-wide text-background/70">
+                <p className="mt-1 text-[0.7rem] sm:text-xs lg:text-sm uppercase tracking-wide text-background/70">
                   Upcycled consciously in Ukraine
                 </p>
               </div>
