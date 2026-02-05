@@ -27,12 +27,12 @@ const trustItems = [
     text: "Created from reclaimed silk neckties. Each piece carries a unique pattern and history.",
   },
   {
-    title: "Limited drops",
-    text: "Small-batch production based on available vintage silk. No overproduction, no waste.",
+    title: "Handcrafted",
+    text: "Each piece is carefully handmade in Ukraine by skilled artisans, with attention to detail and respect for traditional craftsmanship.",
   },
   {
-    title: "Designed with care",
-    text: "Thoughtfully redesigned, cleaned, and finished to feel comfortable and refined.",
+    title: "Limited drops",
+    text: "Small-batch production based on available vintage silk. No overproduction, no waste.",
   },
 ];
 

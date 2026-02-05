@@ -1,8 +1,6 @@
-import { Button } from "@/components/ui/button";
+ import { Button } from "@/components/ui/button";
 
 const COLLECTION_URL =
-  "https://silk4.me/ua/shop_ua/resilk_sleep_mask__scrunchie_ua/";
-const PRODUCT_URL =
   "https://silk4.me/ua/shop_ua/resilk_sleep_mask__scrunchie_ua/";
 
 const Hero = () => {
@@ -23,7 +21,7 @@ const Hero = () => {
     <section
       className="
         relative overflow-hidden
-        pt-24 sm:pt-28 lg:pt-24
+        pt-[92px] sm:pt-28 lg:pt-24
         pb-20
       "
     >
@@ -31,12 +29,11 @@ const Hero = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/30" />
 
       <div className="container mx-auto px-6 relative z-10">
-        {/* GRID — растягиваем по высоте */}
         <div className="grid lg:grid-cols-2 gap-14 items-stretch">
           {/* LEFT */}
           <div className="flex flex-col animate-fade-in">
-            {/* TEXT */}
-            <div className="space-y-7">
+            {/* TOP BLOCK (на мобилке ниже и без пустоты) */}
+            <div className="space-y-7 mt-6 sm:mt-0">
               <h1
                 className="
                   font-serif font-medium text-foreground
@@ -48,33 +45,12 @@ const Hero = () => {
                 Re:SILK
               </h1>
 
-              <p
-                className="
-                  text-muted-foreground leading-relaxed whitespace-pre-line
-                  text-base sm:text-lg lg:text-xl
-                  text-center sm:text-left
-                  mx-auto sm:mx-0
-                  max-w-[420px] sm:max-w-xl
-                "
-              >
-                {`Re:SILK is a new chapter of silk.
-
-A collection of sleep masks with elastic straps,
-crafted from reclaimed silk neckties.
-
-Each piece is one of a kind —
-carefully reworked to support your sleep,
-your skin, and your hair.
-
-Upcycled. Thoughtful. Limited.`}
-              </p>
-
+              {/* TAGS */}
               <div
                 className="
-                  flex flex-wrap gap-4 pt-2
-                  items-center
-                  justify-center text-center
-                  sm:justify-start sm:text-left
+                  flex flex-col items-center text-center gap-3
+                  sm:flex-row sm:items-center sm:text-left sm:gap-4
+                  mt-3 pt-8 lg:pt-50
                 "
               >
                 <span className="text-xs sm:text-sm tracking-[0.25em] uppercase">
@@ -85,9 +61,28 @@ Upcycled. Thoughtful. Limited.`}
                   Upcycled ties
                 </span>
               </div>
+
+              {/* TEXT — СДЕЛАЛИ БОЛЬШЕ */}
+             <p
+  className="
+    text-muted-foreground whitespace-pre-line
+    text-[1.05rem] sm:text-[1.15rem] lg:text-[1.3rem]
+    leading-[1.7]
+    text-center sm:text-left
+    mx-auto sm:mx-0
+    max-w-[520px] lg:max-w-[600px]
+    pt-12 lg:pt-8
+  "
+>
+                {`Re:SILK is a limited drop of silk sleep mask and scrunchie sets, created from deadstock premium men’s silk ties — reimagined into pieces of calm, care, and conscious living.
+
+Only 50 sets were created, and each one is truly one of a kind.
+
+Upcycled. Thoughtful. Limited.`}
+              </p>
             </div>
 
-            {/* BUTTONS — ЯКОРЬ НИЗА */}
+            {/* BUTTONS — НЕ ТРОГАЕМ */}
             <div
               className="
                 mt-10 sm:mt-auto
@@ -117,9 +112,8 @@ Upcycled. Thoughtful. Limited.`}
             </div>
           </div>
 
-          {/* RIGHT */}
+          {/* RIGHT (desktop only) */}
           <div className="relative hidden lg:flex flex-col">
-            {/* картинку ПРИЖИМАЕМ ВНИЗ */}
             <div className="mt-auto">
               <div className="border-[2.5px] border-border/70 p-[6px]">
                 <div className="relative overflow-hidden">
@@ -130,42 +124,11 @@ Upcycled. Thoughtful. Limited.`}
                     style={{ objectPosition: "80% 92%" }}
                     draggable={false}
                   />
-
-                  <a
-                    href={PRODUCT_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="
-                      absolute right-[14%] top-[62%]
-                      bg-background/90 backdrop-blur-sm
-                      border border-border/50
-                      px-6 py-4 max-w-[360px]
-                      shadow-sm hover:shadow-md transition-shadow
-                    "
-                    style={{ animation: "badge-float 3.6s ease-in-out infinite" }}
-                  >
-                    <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-2 text-center">
-                      New drop
-                    </p>
-                    <p className="text-lg font-serif text-foreground">
-                      Re:SILK sleep mask with scrunchie
-                    </p>
-                    <p className="mt-2 text-xs underline underline-offset-4 text-muted-foreground text-center">
-                      Open product page
-                    </p>
-                  </a>
                 </div>
               </div>
             </div>
-
-            <style>{`
-              @keyframes badge-float {
-                0% { transform: translate(0,0); }
-                50% { transform: translate(40px, -30px); }
-                100% { transform: translate(0,0); }
-              }
-            `}</style>
           </div>
+          {/* /RIGHT */}
         </div>
       </div>
     </section>

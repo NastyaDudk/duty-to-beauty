@@ -1,29 +1,29 @@
 import { Sparkles, Wind, Crown, Shield } from "lucide-react";
 
 const benefits = [
+    {
+    icon: Crown,
+    title: "Temperature-regulating & breathable",
+    description:
+      "The natural silk filling of sleep masks helps regulate temperature and allows airflow, keeping skin comfortable throughout the night — unlike synthetic fabrics that can trap heat and moisture, encouraging bacteria buildup and sleep creases.",
+  },
   {
     icon: Sparkles,
-    title: "Exceptional softness",
+    title: "Better sleep quality",
     description:
-      "Natural silk feels incredibly gentle on the skin, offering a sense of comfort and refined luxury with every wear.",
+      "Sleeping in a silk sleep mask helps block light, supporting natural melatonin production — the «hormone of youth and beauty.",
+  },
+   {
+    icon: Shield,
+    title: "Naturally anti-aging",
+    description:
+      "Silk contains sericin and fibroin, natural proteins known for their moisturizing and protective properties, which help support skin elasticity, reduce moisture loss, and promote smoother-looking skin over time.",
   },
   {
     icon: Wind,
-    title: "Breathable & lightweight",
+    title: "Gentle on skin and hair",
     description:
-      "Silk’s natural fibers allow the skin to breathe, helping maintain comfort in different temperatures throughout the day.",
-  },
-  {
-    icon: Crown,
-    title: "Timeless elegance",
-    description:
-      "The subtle sheen and fluid texture of silk create a refined, understated look that never goes out of style.",
-  },
-  {
-    icon: Shield,
-    title: "Made to last",
-    description:
-      "With proper care, silk accessories retain their beauty and quality over time — a conscious alternative to disposable fashion.",
+      "Silk reduces friction, helping prevent sleep creases on the skin and minimizing hair breakage, pulling, and tension.",
   },
 ];
 
