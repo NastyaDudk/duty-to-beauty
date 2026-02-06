@@ -31,16 +31,10 @@ const Footer = () => {
           </a>
 
           {/* Copyright */}
-         <p className="
-  text-sm text-background/70 leading-relaxed
-  text-center
-  md:whitespace-nowrap
-">
-  © 2026 Silk4me. All rights reserved.
-  <span className="md:ml-2 block md:inline">
-    Premium silk brand from Ukraine.
-  </span>
-</p>
+
+           <p className="text-sm text-background/70 text-center">
+              © 2026 Silk4me. All rights reserved. Premium silk brand from Ukraine.
+          </p>
 
           {/* Social Links */}
           <div
