@@ -65,14 +65,14 @@ function Stars({ rating }: { rating: number }) {
 
 const Reviews = () => {
   return (
-    <section
-      id="reviews"
-      className="
-        py-20
-        bg-silk-charcoal
-        text-background
-      "
-    >
+   <section
+  id="reviews"
+  className="
+    bg-silk-charcoal
+    text-background
+    py-14 sm:py-20 lg:py-24
+  "
+>
       <div className="container mx-auto px-6">
         {/* Header (чтобы блок не начинался “в лоб”) */}
         <div className="mb-10 text-center">

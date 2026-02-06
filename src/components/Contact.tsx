@@ -75,7 +75,13 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-24 bg-silk-charcoal">
+   <section
+  id="contact"
+  className="
+    bg-silk-charcoal
+    py-14 sm:py-20 lg:py-24
+  "
+>
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* LEFT — IMAGE (desktop only, keep size) */}

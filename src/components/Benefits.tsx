@@ -29,7 +29,13 @@ const benefits = [
 
 const Benefits = () => {
   return (
-    <section id="collection" className="py-24 bg-background">
+   <section
+  id="collection"
+  className="
+    bg-background
+    py-14 sm:py-20 lg:py-24
+  "
+>
       <div className="container mx-auto px-6">
         <div className="text-center space-y-4 mb-16">
           <p className="text-primary uppercase tracking-[0.3em] text-sm">

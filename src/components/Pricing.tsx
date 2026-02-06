@@ -18,7 +18,13 @@ const Pricing = () => {
   const featuredImg = `${import.meta.env.BASE_URL}tiemask.jpg`;
 
   return (
-    <section id="pricing" className="py-24 bg-background">
+    <section
+  id="pricing"
+  className="
+    bg-background
+    py-14 sm:py-20 lg:py-24
+  "
+>
       <div className="container mx-auto px-6">
         {/* ✅ items-stretch = колонки одной высоты на десктопе */}
         <div className="grid lg:grid-cols-2 gap-16 items-stretch">

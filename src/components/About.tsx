@@ -2,7 +2,14 @@ const About = () => {
   const collectionImg = `${import.meta.env.BASE_URL}silktie.JPG`;
 
   return (
-    <section id="about" className="bg-silk-charcoal pt-24 pb-28">
+   <section
+  id="about"
+  className="
+    bg-silk-charcoal
+    pt-14 sm:pt-20 lg:pt-24
+    pb-24 lg:pb-28
+  "
+>
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* IMAGE */}

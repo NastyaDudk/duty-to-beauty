@@ -35,15 +35,16 @@ const Hero = () => {
             {/* TEXT */}
             <div className="space-y-5 sm:space-y-7">
               <h1
-                className="
-                  font-serif font-medium text-foreground
-                  text-4xl sm:text-5xl md:text-6xl lg:text-7xl
-                  leading-[1.05]
-                  text-center sm:text-left
-                "
-              >
-                Re:SILK
-              </h1>
+  className="
+    mt-5 sm:mt-0
+    font-serif font-medium text-foreground
+    text-4xl sm:text-5xl md:text-6xl lg:text-7xl
+    leading-[1.05]
+    text-center sm:text-left
+  "
+>
+  Re:SILK
+</h1>
 
               {/* TAGS */}
              <div
