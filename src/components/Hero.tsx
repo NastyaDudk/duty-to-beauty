@@ -18,13 +18,13 @@ const Hero = () => {
   };
 
   return (
-    <section
-      className="
-        relative overflow-hidden
-        pt-[72px] sm:pt-28 lg:pt-24
-        pb-14 sm:pb-20
-      "
-    >
+   <section
+  className="
+    relative overflow-hidden
+    pt-[64px] sm:pt-24 lg:pt-24
+    pb-12 sm:pb-20 lg:pb-24
+  "
+>
       {/* background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/30" />
 
