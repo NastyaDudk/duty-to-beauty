@@ -15,7 +15,7 @@ app.use(
       "http://localhost:5173",
       "http://127.0.0.1:5173",
       "https://nastyadudk.github.io",
-      "https://nastyadudk.github.io/silk4me",
+      "https://nastyadudk.github.io/duty-to-beauty",
       // 👉 если второй лендинг в другой папке — добавим тут
     ],
   }),
