@@ -1,53 +1,84 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Send, MapPin, Instagram, Mail } from "lucide-react";
 
+/* =========================
+   API URL
+========================= */
 const isLocal =
   typeof window !== "undefined" &&
-  (window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1");
+  ["localhost", "127.0.0.1"].includes(window.location.hostname);
 
-const DEFAULT_API = isLocal
+const API_URL = isLocal
   ? "http://localhost:5050/api/lead"
-  : "https://silk4me.onrender.com/api/lead";
+  : "https://silk4me-api.onrender.com/api/lead";
 
-const API_URL = import.meta.env.VITE_API_URL || DEFAULT_API;
+/* =========================
+   TYPES
+========================= */
+type FormData = {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+};
 
-const lifestyleImg = `${import.meta.env.BASE_URL}color8.jpg`;
-const SOURCE_TAG = "re:silk";
+type Errors = {
+  name?: string;
+  email?: string;
+  phone?: string;
+};
 
-// image size (do not change)
-const IMG_H = 560;
-const FRAME_PAD = 16; // because of absolute -inset-4
-const FRAME_H = IMG_H + FRAME_PAD * 2; // 592
+/* =========================
+   EMAIL REGEX
+========================= */
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function Contact() {
-  const [formData, setFormData] = useState({ name: "", phone: "", message: "" });
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  const [errors, setErrors] = useState<Errors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const formRef = useRef<HTMLFormElement | null>(null);
-  const email = useMemo(() => "Silkandnature" + "@gmail.com", []);
+  /* =========================
+     VALIDATION
+  ========================= */
+  const validate = (): boolean => {
+    const next: Errors = {};
 
-  useEffect(() => {
-    if (isLocal) return;
-    fetch(API_URL, { method: "OPTIONS" }).catch(() => {});
-  }, []);
+    if (!formData.name.trim()) {
+      next.name = "Please enter your name";
+    }
 
+    if (!formData.email.trim()) {
+      next.email = "Please enter your email";
+    } else if (!EMAIL_REGEX.test(formData.email)) {
+      next.email = "Please enter a valid email";
+    }
+
+    if (!formData.phone.trim()) {
+      next.phone = "Please enter your phone number";
+    }
+
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
+
+  /* =========================
+     SUBMIT
+  ========================= */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
-
-    const name = formData.name.trim();
-    const phone = formData.phone.trim();
-    const message = formData.message.trim();
-
-    if (!name || !phone) {
-      toast.error("Please fill in your name and phone number.");
-      return;
-    }
+    if (!validate()) return;
 
     setIsSubmitting(true);
 
@@ -56,165 +87,163 @@ export default function Contact() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name,
-          phone,
-          message: message ? `[${SOURCE_TAG}] ${message}` : `[${SOURCE_TAG}]`,
-          source: SOURCE_TAG,
+          ...formData,
+          source: "Landing EN",
         }),
       });
 
       if (!res.ok) throw new Error();
 
-      toast.success("✅ Sent! We’ll get back to you shortly.");
-      setFormData({ name: "", phone: "", message: "" });
+      toast.success("✅ Sent! We’ll contact you shortly.");
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+      setErrors({});
     } catch {
-      toast.error("Connection error. Please try again.");
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-   <section
-  id="contact"
-  className="
-    bg-silk-charcoal
-    py-14 sm:py-20 lg:py-24
-  "
->
+    <section id="contact" className="bg-silk-charcoal py-20">
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
-          {/* LEFT — IMAGE (desktop only, keep size) */}
+          {/* LEFT — IMAGE */}
           <div className="relative hidden lg:block">
             <div className="absolute -inset-4 border border-gold/20" />
             <img
-              src={lifestyleImg}
-              alt="Re:SILK — silk sleep mask"
+              src={`${import.meta.env.BASE_URL}color8.jpg`}
+              alt="Re:SILK"
               className="w-full h-[560px] object-cover"
               draggable={false}
             />
           </div>
 
-          {/* RIGHT — CONTACT aligned to the FRAME */}
-          <div className={`flex flex-col lg:h-[${FRAME_H}px] lg:justify-between`}>
-            {/* TOP — aligned to top of frame */}
-            <div>
-              <div className="text-center lg:text-left">
-               <p className="text-gold uppercase tracking-[0.35em] text-sm -mt-2">
-  Contact
-</p>
-                <h2 className="mt-4 text-3xl md:text-4xl font-serif font-light text-background">
-                  Get a <span className="text-gold">personal consultation</span>
-                </h2>
-              </div>
+          {/* RIGHT — FORM */}
+          <div>
+            <div className="text-center lg:text-left">
+              <p className="text-gold uppercase tracking-[0.35em] text-sm">
+                Contact
+              </p>
+              <h2 className="mt-4 text-3xl md:text-4xl font-serif text-background">
+                Get a <span className="text-gold">personal consultation</span>
+              </h2>
+            </div>
 
-              {/* FORM (button is outside) */}
-              <form
-                ref={formRef}
-                onSubmit={handleSubmit}
-                className="w-full lg:max-w-xl mx-auto lg:mx-0 mt-10"
-                noValidate
-              >
-                <div className="grid md:grid-cols-2 gap-4">
+            <form
+              onSubmit={handleSubmit}
+              className="mt-10 space-y-6 max-w-xl mx-auto lg:mx-0"
+              noValidate
+            >
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
                   <Input
                     placeholder="Your name"
                     value={formData.name}
                     onChange={(e) =>
                       setFormData((p) => ({ ...p, name: e.target.value }))
                     }
-                    className="h-14 bg-background text-foreground border-border/50 focus:border-gold px-6"
+                    className="h-14 bg-background"
                   />
+                  {errors.name && (
+                    <p className="mt-1 text-sm text-background/70">
+                      {errors.name}
+                    </p>
+                  )}
+                </div>
 
+                <div>
                   <Input
-                    type="tel"
-                    placeholder="Phone number"
-                    value={formData.phone}
+                    type="email"
+                    placeholder="Email"
+                    value={formData.email}
                     onChange={(e) =>
-                      setFormData((p) => ({ ...p, phone: e.target.value }))
+                      setFormData((p) => ({ ...p, email: e.target.value }))
                     }
-                    className="h-14 bg-background text-foreground border-border/50 focus:border-gold px-6"
+                    className="h-14 bg-background"
                   />
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-background/70">
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
+              </div>
 
-                {/* ✅ MORE AIR ABOVE TEXTAREA (no space-y, explicit margin) */}
-                <Textarea
-                  placeholder="Your message (optional)"
-                  value={formData.message}
+              <div>
+                <Input
+                  placeholder="Phone number"
+                  value={formData.phone}
                   onChange={(e) =>
-                    setFormData((p) => ({ ...p, message: e.target.value }))
+                    setFormData((p) => ({
+                      ...p,
+                      phone: e.target.value.replace(/[^\d+]/g, ""),
+                    }))
                   }
-                  className="
-                    mt-10
-                    min-h-[195px]
-                    bg-background text-foreground
-                    border-border/50 focus:border-gold
-                    px-6 py-4
-                    resize-none
-                  "
+                  className="h-14 bg-background"
                 />
-              </form>
-           
+                {errors.phone && (
+                  <p className="mt-1 text-sm text-background/70">
+                    {errors.phone}
+                  </p>
+                )}
+              </div>
 
-              {/* BOTTOM (ровно по низу рамки) */}
-              <div className="space-y-8 mt-10 lg:mt-16">
-                {/* BUTTON — отдельно от формы */}
-                <div className="flex justify-center lg:justify-start">
-                  <Button
-                    type="button"
-                    disabled={isSubmitting}
-                    onClick={() => formRef.current?.requestSubmit()}
-                    className="
-                      relative overflow-hidden
-                      px-14 py-6 text-base font-medium
-                      bg-gradient-to-r from-gold to-gold-light
-                      text-accent-foreground
-                      shadow-[0_10px_30px_rgba(212,175,55,0.35)]
-                      hover:shadow-[0_14px_40px_rgba(212,175,55,0.45)]
-                      hover:-translate-y-[1px]
-                      active:translate-y-0
-                      transition-all duration-300
-                    "
-                  >
-                    {isSubmitting ? "Sending..." : "Send request"}
-                    <Send className="w-4 h-4 ml-3" />
-                  </Button>
-                </div>
+              <Textarea
+                placeholder="Your message (optional)"
+                value={formData.message}
+                onChange={(e) =>
+                  setFormData((p) => ({ ...p, message: e.target.value }))
+                }
+                className="min-h-[180px] bg-background resize-none"
+              />
 
-                {/* LINKS — в линию */}
-                <div
+              <div className="pt-4 flex justify-center lg:justify-start">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
                   className="
-                    flex flex-wrap items-center justify-center gap-6
-                    lg:justify-start
-                    text-sm
+                    px-14 h-14 text-lg
+                    bg-gradient-to-r from-gold to-gold-light
+                    text-accent-foreground
+                    transition-all
                   "
                 >
-                  <a
-                    href="https://www.instagram.com/silk4me"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 group"
-                  >
-                    <Instagram className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
-                    <span className="text-background/80 group-hover:text-gold-light transition-colors">
-                      Message us on Instagram
-                    </span>
-                  </a>
+                  {isSubmitting ? "Sending..." : "Send request"}
+                  <Send className="w-4 h-4 ml-3" />
+                </Button>
+              </div>
+            </form>
 
-                  <a
-                    href={`mailto:${email}`}
-                    className="flex items-center gap-3 group"
-                  >
-                    <Mail className="w-5 h-5 text-gold group-hover:text-gold-light transition-colors" />
-                    <span className="text-background/80 group-hover:text-gold-light transition-colors">
-                      Email us
-                    </span>
-                  </a>
+            {/* LINKS */}
+            <div className="mt-12 flex flex-wrap gap-6 justify-center lg:justify-start">
+              <a
+                href="https://www.instagram.com/silk4me"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-3 text-background/80 hover:text-gold"
+              >
+                <Instagram className="w-5 h-5" />
+                Instagram
+              </a>
 
-                  <div className="flex items-center gap-3">
-                    <MapPin className="w-5 h-5 text-gold" />
-                    <span className="text-background/80">Ukraine / Europe</span>
-                  </div>
-                </div>
+              <a
+                href="mailto:Silkandnature@gmail.com"
+                className="flex items-center gap-3 text-background/80 hover:text-gold"
+              >
+                <Mail className="w-5 h-5" />
+                Email
+              </a>
+
+              <div className="flex items-center gap-3 text-background/70">
+                <MapPin className="w-5 h-5" />
+                Ukraine / Europe
               </div>
             </div>
           </div>

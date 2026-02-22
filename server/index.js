@@ -1,169 +1,151 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
-import path from "path";
+import axios from "axios";
 
 const app = express();
 
-/**
- * ✅ dotenv:
- * - Локально: читаем server/.env
- * - На Render: переменные берутся из Environment Variables
- */
-dotenv.config({
-  path: path.resolve(process.cwd(), "server", ".env"),
-});
-
-/**
- * ✅ CORS:
- * Разрешаем:
- * - локалка (Vite 5173)
- * - GitHub Pages домен
- */
-const ALLOWED_ORIGINS = [
-  "http://localhost:5173",
-  "http://127.0.0.1:5173",
-  "https://nastyadudk.github.io",
-];
-
-const corsOptions = {
-  origin: (origin, cb) => {
-    // запросы без Origin (curl/postman) — разрешаем
-    if (!origin) return cb(null, true);
-
-    if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
-
-    console.log("❌ CORS blocked origin:", origin);
-    return cb(new Error(`CORS blocked: ${origin}`), false);
-  },
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type"],
-};
-
-app.use(cors(corsOptions));
-// ✅ обязательно для preflight — ИМЕННО с теми же опциями
-app.options(/.*/, cors(corsOptions));
-
+/* =========================
+   MIDDLEWARE
+========================= */
 app.use(express.json());
 
-/** ✅ helpers */
-function getToken() {
-  return process.env.TG_BOT_TOKEN || "";
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "https://nastyadudk.github.io",
+      "https://nastyadudk.github.io/silk4me",
+      // 👉 если второй лендинг в другой папке — добавим тут
+    ],
+  }),
+);
+
+/* =========================
+   ENV (Render / .env)
+========================= */
+const TG_TOKEN = process.env.TG_BOT_TOKEN;
+const TG_CHAT_ID = process.env.TG_CHAT_ID; // строка — ОК
+const HUBSPOT_TOKEN = process.env.HUBSPOT_TOKEN;
+
+/* =========================
+   HEALTH
+========================= */
+app.get("/", (_, res) => res.send("✅ API running"));
+app.get("/api/test", (_, res) => res.json({ ok: true }));
+
+/* =========================
+   TELEGRAM
+========================= */
+async function sendToTelegram({ name, email, phone, message, source }) {
+  if (!TG_TOKEN || !TG_CHAT_ID) {
+    console.error("❌ Telegram ENV missing");
+    return;
+  }
+
+  await axios.post(
+    `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,
+    {
+      chat_id: TG_CHAT_ID,
+      text:
+        `🧾 New lead\n` +
+        `👤 Name: ${name}\n` +
+        (email ? `📧 Email: ${email}\n` : "") +
+        `📞 Phone: ${phone}\n` +
+        `💬 Message: ${message || "—"}\n` +
+        `🌐 Source: ${source}`,
+    },
+    { timeout: 5000 },
+  );
+
+  console.log("✅ Telegram sent:", phone);
 }
 
-function getChatId() {
-  const raw = process.env.TG_CHAT_ID;
-  if (!raw) return "";
+/* =========================
+   HUBSPOT (CREATE / UPSERT)
+========================= */
+async function sendToHubSpot({ name, email, phone, message, source }) {
+  if (!HUBSPOT_TOKEN) {
+    console.error("❌ HUBSPOT_TOKEN missing");
+    return;
+  }
 
-  // chat_id может быть "-100..." — это нормально
-  const n = Number(raw);
-  return Number.isNaN(n) ? raw : n;
+  if (!email) {
+    console.warn("⚠️ No email → HubSpot skipped");
+    return;
+  }
+
+  const [firstname, ...rest] = name.trim().split(" ");
+  const lastname = rest.join(" ") || "";
+
+  try {
+    const res = await axios.post(
+      "https://api.hubapi.com/crm/v3/objects/contacts?idProperty=email",
+      {
+        properties: {
+          email,
+          firstname,
+          lastname,
+          phone,
+          lifecyclestage: "lead",
+          message: message || "",
+          // ❗ НЕ используем lead_source — его нет в HubSpot по умолчанию
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${HUBSPOT_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        timeout: 10000,
+      },
+    );
+
+    console.log("✅ HubSpot contact saved:", res.data.id);
+  } catch (err) {
+    console.error(
+      "❌ HubSpot ERROR:",
+      err.response?.status,
+      JSON.stringify(err.response?.data, null, 2),
+    );
+  }
 }
 
-/** ✅ health */
-app.get("/", (req, res) => {
-  res.send("✅ Silk4me API is running");
-});
+/* =========================
+   LEAD ENDPOINT
+========================= */
+app.post("/api/lead", (req, res) => {
+  const {
+    name,
+    email = "",
+    phone,
+    message = "",
+    source = "Second landing",
+  } = req.body || {};
 
-app.get("/api/test", (req, res) => {
-  res.json({ ok: true, message: "Server is alive" });
-});
+  console.log("📩 Lead received:", phone);
 
-/** ✅ test telegram: GET /api/test-telegram */
-app.get("/api/test-telegram", async (req, res) => {
-  try {
-    const BOT_TOKEN = getToken();
-    const CHAT_ID = getChatId();
-
-    if (!BOT_TOKEN || !CHAT_ID) {
-      return res.status(500).json({
-        ok: false,
-        error: "missing_env",
-        hasToken: !!BOT_TOKEN,
-        hasChatId: !!CHAT_ID,
-      });
-    }
-
-    const tgRes = await fetch(
-      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: CHAT_ID,
-          text: "✅ TEST: Telegram connected",
-          disable_web_page_preview: true,
-        }),
-      }
-    );
-
-    const data = await tgRes.json().catch(() => ({}));
-    return res.status(tgRes.ok ? 200 : 500).json(data);
-  } catch (e) {
-    return res.status(500).json({ ok: false, error: String(e) });
+  if (!name || !phone) {
+    return res.status(400).json({ ok: false });
   }
+
+  // ⚡ мгновенный ответ фронту
+  res.json({ ok: true });
+
+  // 🔥 фоновые задачи
+  sendToTelegram({ name, email, phone, message, source }).catch((e) =>
+    console.error("TG error:", e.message),
+  );
+
+  sendToHubSpot({ name, email, phone, message, source }).catch((e) =>
+    console.error("HS error:", e.message),
+  );
 });
 
-/** ✅ lead: POST /api/lead */
-app.post("/api/lead", async (req, res) => {
-  try {
-    const { name, phone, message } = req.body || {};
-
-    if (!name || !phone) {
-      return res
-        .status(400)
-        .json({ ok: false, error: "name_and_phone_required" });
-    }
-
-    const BOT_TOKEN = getToken();
-    const CHAT_ID = getChatId();
-
-    if (!BOT_TOKEN || !CHAT_ID) {
-      return res.status(500).json({
-        ok: false,
-        error: "missing_env",
-        hasToken: !!BOT_TOKEN,
-        hasChatId: !!CHAT_ID,
-      });
-    }
-
-    const text =
-      `🧾 Нова заявка Silk4me\n` +
-      `👤 Ім’я: ${String(name).trim()}\n` +
-      `📞 Контакт: ${String(phone).trim()}\n` +
-      `💬 Повідомлення: ${String(message || "").trim() || "—"}\n` +
-      `🌐 Джерело: лендинг`;
-
-    const tgRes = await fetch(
-      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: CHAT_ID,
-          text,
-          disable_web_page_preview: true,
-        }),
-      }
-    );
-
-    const data = await tgRes.json().catch(() => ({}));
-
-    if (!tgRes.ok || !data.ok) {
-      return res.status(500).json({
-        ok: false,
-        error: "telegram_error",
-        details: data,
-      });
-    }
-
-    return res.json({ ok: true });
-  } catch (e) {
-    return res.status(500).json({ ok: false, error: String(e) });
-  }
-});
-
-const PORT = Number(process.env.PORT) || 5050;
+/* =========================
+   START
+========================= */
+const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
-  console.log(`✅ Lead server: http://localhost:${PORT}`);
+  console.log(`🚀 Server running on ${PORT}`);
 });
