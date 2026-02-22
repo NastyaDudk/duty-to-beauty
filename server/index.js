@@ -120,7 +120,7 @@ app.post("/api/lead", (req, res) => {
     email = "",
     phone,
     message = "",
-    source = "Second landing",
+    source = "re-silk landing",
   } = req.body || {};
 
   console.log("📩 Lead received:", phone);
