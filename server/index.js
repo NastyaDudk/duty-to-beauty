@@ -16,6 +16,7 @@ app.use(
       "http://127.0.0.1:5173",
       "https://nastyadudk.github.io",
       "https://nastyadudk.github.io/duty-to-beauty",
+      "https://re-silk.silk4.me",
       // 👉 если второй лендинг в другой папке — добавим тут
     ],
   }),
@@ -52,8 +53,7 @@ async function sendToTelegram({ name, email, phone, message, source }) {
         `👤 Name: ${name}\n` +
         (email ? `📧 Email: ${email}\n` : "") +
         `📞 Phone: ${phone}\n` +
-        `💬 Message: ${message || "—"}\n` +
-        `🌐 Source: ${source}`,
+        `💬 Message: ${message || "—"}\n`,
     },
     { timeout: 5000 },
   );
