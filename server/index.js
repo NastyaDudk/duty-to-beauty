@@ -17,7 +17,6 @@ app.use(
       "https://nastyadudk.github.io",
       "https://nastyadudk.github.io/duty-to-beauty",
       "https://re-silk.silk4.me",
-      // 👉 если второй лендинг в другой папке — добавим тут
     ],
   }),
 );
@@ -26,7 +25,7 @@ app.use(
    ENV (Render / .env)
 ========================= */
 const TG_TOKEN = process.env.TG_BOT_TOKEN;
-const TG_CHAT_ID = process.env.TG_CHAT_ID; // строка — ОК
+const TG_CHAT_ID = process.env.TG_CHAT_ID;
 const HUBSPOT_TOKEN = process.env.HUBSPOT_TOKEN;
 
 /* =========================
@@ -38,34 +37,38 @@ app.get("/api/test", (_, res) => res.json({ ok: true }));
 /* =========================
    TELEGRAM
 ========================= */
-async function sendToTelegram({ name, email, phone, message, source }) {
+async function sendToTelegram({ name, email, phone, message }) {
   if (!TG_TOKEN || !TG_CHAT_ID) {
     console.error("❌ Telegram ENV missing");
     return;
   }
 
-  await axios.post(
-    `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,
-    {
-      chat_id: TG_CHAT_ID,
-      text:
-        `🧾 New lead\n` +
-        `📍 Source: ${source}\n` +
-        `👤 Name: ${name}\n` +
-        (email ? `📧 Email: ${email}\n` : "") +
-        `📞 Phone: ${phone}\n` +
-        `💬 Message: ${message || "—"}\n`,
-    },
-    { timeout: 5000 },
-  );
+  try {
+    await axios.post(
+      `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,
+      {
+        chat_id: TG_CHAT_ID,
+        text:
+          `🧾 New lead\n` +
+          `📍 Source: re-silk\n` +
+          `👤 Name: ${name}\n` +
+          (email ? `📧 Email: ${email}\n` : "") +
+          `📞 Phone: ${phone}\n` +
+          `💬 Message: ${message || "—"}\n`,
+      },
+      { timeout: 5000 },
+    );
 
-  console.log("✅ Telegram sent:", phone);
+    console.log("✅ Telegram sent:", phone);
+  } catch (e) {
+    console.error("❌ Telegram error:", e.message);
+  }
 }
 
 /* =========================
-   HUBSPOT (CREATE / UPSERT)
+   HUBSPOT
 ========================= */
-async function sendToHubSpot({ name, email, phone, message, source }) {
+async function sendToHubSpot({ name, email, phone, message }) {
   if (!HUBSPOT_TOKEN) {
     console.error("❌ HUBSPOT_TOKEN missing");
     return;
@@ -90,7 +93,7 @@ async function sendToHubSpot({ name, email, phone, message, source }) {
           phone,
           lifecyclestage: "lead",
           message: message || "",
-          source_custom: source,
+          source_custom: "re-silk",
         },
       },
       {
@@ -116,13 +119,7 @@ async function sendToHubSpot({ name, email, phone, message, source }) {
    LEAD ENDPOINT
 ========================= */
 app.post("/api/lead", (req, res) => {
-  const {
-    name,
-    email = "",
-    phone,
-    message = "",
-    source = "re-silk",
-  } = req.body || {};
+  const { name, email = "", phone, message = "" } = req.body || {};
 
   console.log("📩 Lead received:", phone);
 
@@ -130,23 +127,19 @@ app.post("/api/lead", (req, res) => {
     return res.status(400).json({ ok: false });
   }
 
-  // ⚡ мгновенный ответ фронту
+  // быстрый ответ фронту
   res.json({ ok: true });
 
-  // 🔥 фоновые задачи
-  sendToTelegram({ name, email, phone, message, source }).catch((e) =>
-    console.error("TG error:", e.message),
-  );
-
-  sendToHubSpot({ name, email, phone, message, source }).catch((e) =>
-    console.error("HS error:", e.message),
-  );
+  // отправка в фоне
+  sendToTelegram({ name, email, phone, message });
+  sendToHubSpot({ name, email, phone, message });
 });
 
 /* =========================
    START
 ========================= */
 const PORT = process.env.PORT || 5050;
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on ${PORT}`);
 });
