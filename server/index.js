@@ -12,13 +12,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://127.0.0.1:5173",
-      "https://nastyadudk.github.io",
-      "https://nastyadudk.github.io/duty-to-beauty",
-      "https://re-silk.silk4.me",
-    ],
+    origin: "*",
   }),
 );
 
@@ -34,35 +28,15 @@ const HUBSPOT_TOKEN = process.env.HUBSPOT_TOKEN;
    HEALTH
 ========================= */
 
-app.get("/", (_, res) => res.send("API running"));
-
-/* =========================
-   SOURCE DETECTION
-========================= */
-
-function detectSource(req) {
-  const referer = req.headers.referer || "";
-
-  if (referer.includes("re-silk")) {
-    return "re-silk";
-  }
-
-  if (referer.includes("duty-to-beauty")) {
-    return "duty-to-beauty";
-  }
-
-  if (referer.includes("blck")) {
-    return "BLCK";
-  }
-
-  return "BLCK"; // fallback
-}
+app.get("/", (_, res) => {
+  res.send("RE-SILK API WORKING");
+});
 
 /* =========================
    TELEGRAM
 ========================= */
 
-async function sendToTelegram({ name, email, phone, message, source }) {
+async function sendToTelegram(name, email, phone, message) {
   if (!TG_TOKEN || !TG_CHAT_ID) return;
 
   try {
@@ -70,14 +44,12 @@ async function sendToTelegram({ name, email, phone, message, source }) {
       chat_id: TG_CHAT_ID,
       text:
         `🧾 New lead\n` +
-        `📍 Source: ${source}\n` +
+        `📍 Source: re-silk\n` +
         `👤 Name: ${name}\n` +
         (email ? `📧 Email: ${email}\n` : "") +
         `📞 Phone: ${phone}\n` +
-        `💬 Message: ${message || "—"}\n`,
+        `💬 Message: ${message || "—"}`,
     });
-
-    console.log("Telegram sent");
   } catch (e) {
     console.error("Telegram error:", e.message);
   }
@@ -87,7 +59,7 @@ async function sendToTelegram({ name, email, phone, message, source }) {
    HUBSPOT
 ========================= */
 
-async function sendToHubSpot({ name, email, phone, message, source }) {
+async function sendToHubSpot(name, email, phone, message) {
   if (!HUBSPOT_TOKEN) return;
   if (!email) return;
 
@@ -105,7 +77,7 @@ async function sendToHubSpot({ name, email, phone, message, source }) {
           phone,
           lifecyclestage: "lead",
           message: message || "",
-          source_custom: source,
+          source_custom: "re-silk",
         },
       },
       {
@@ -115,8 +87,6 @@ async function sendToHubSpot({ name, email, phone, message, source }) {
         },
       },
     );
-
-    console.log("HubSpot saved");
   } catch (err) {
     console.error("HubSpot error:", err.response?.data || err.message);
   }
@@ -133,14 +103,12 @@ app.post("/api/lead", (req, res) => {
     return res.status(400).json({ ok: false });
   }
 
-  const source = detectSource(req);
-
-  console.log("Lead:", phone, "source:", source);
+  console.log("NEW RE-SILK LEAD:", phone);
 
   res.json({ ok: true });
 
-  sendToTelegram({ name, email, phone, message, source });
-  sendToHubSpot({ name, email, phone, message, source });
+  sendToTelegram(name, email, phone, message);
+  sendToHubSpot(name, email, phone, message);
 });
 
 /* =========================
@@ -150,5 +118,5 @@ app.post("/api/lead", (req, res) => {
 const PORT = process.env.PORT || 5050;
 
 app.listen(PORT, () => {
-  console.log("Server running on", PORT);
+  console.log("Server running on port", PORT);
 });
