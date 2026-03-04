@@ -34,38 +34,52 @@ const HUBSPOT_TOKEN = process.env.HUBSPOT_TOKEN;
    HEALTH
 ========================= */
 
-app.get("/", (_, res) => res.send("✅ API running"));
-app.get("/api/test", (_, res) => res.json({ ok: true }));
+app.get("/", (_, res) => res.send("API running"));
+
+/* =========================
+   SOURCE DETECTION
+========================= */
+
+function detectSource(req) {
+  const referer = req.headers.referer || "";
+
+  if (referer.includes("re-silk")) {
+    return "re-silk";
+  }
+
+  if (referer.includes("duty-to-beauty")) {
+    return "duty-to-beauty";
+  }
+
+  if (referer.includes("blck")) {
+    return "BLCK";
+  }
+
+  return "BLCK"; // fallback
+}
 
 /* =========================
    TELEGRAM
 ========================= */
 
 async function sendToTelegram({ name, email, phone, message, source }) {
-  if (!TG_TOKEN || !TG_CHAT_ID) {
-    console.error("❌ Telegram ENV missing");
-    return;
-  }
+  if (!TG_TOKEN || !TG_CHAT_ID) return;
 
   try {
-    await axios.post(
-      `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,
-      {
-        chat_id: TG_CHAT_ID,
-        text:
-          `🧾 New lead\n` +
-          `📍 Source: ${source}\n` +
-          `👤 Name: ${name}\n` +
-          (email ? `📧 Email: ${email}\n` : "") +
-          `📞 Phone: ${phone}\n` +
-          `💬 Message: ${message || "—"}\n`,
-      },
-      { timeout: 5000 },
-    );
+    await axios.post(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+      chat_id: TG_CHAT_ID,
+      text:
+        `🧾 New lead\n` +
+        `📍 Source: ${source}\n` +
+        `👤 Name: ${name}\n` +
+        (email ? `📧 Email: ${email}\n` : "") +
+        `📞 Phone: ${phone}\n` +
+        `💬 Message: ${message || "—"}\n`,
+    });
 
-    console.log("✅ Telegram sent:", phone);
+    console.log("Telegram sent");
   } catch (e) {
-    console.error("❌ Telegram error:", e.message);
+    console.error("Telegram error:", e.message);
   }
 }
 
@@ -74,21 +88,14 @@ async function sendToTelegram({ name, email, phone, message, source }) {
 ========================= */
 
 async function sendToHubSpot({ name, email, phone, message, source }) {
-  if (!HUBSPOT_TOKEN) {
-    console.error("❌ HUBSPOT_TOKEN missing");
-    return;
-  }
-
-  if (!email) {
-    console.warn("⚠️ No email → HubSpot skipped");
-    return;
-  }
+  if (!HUBSPOT_TOKEN) return;
+  if (!email) return;
 
   const [firstname, ...rest] = name.trim().split(" ");
-  const lastname = rest.join(" ") || "";
+  const lastname = rest.join(" ");
 
   try {
-    const res = await axios.post(
+    await axios.post(
       "https://api.hubapi.com/crm/v3/objects/contacts?idProperty=email",
       {
         properties: {
@@ -106,44 +113,17 @@ async function sendToHubSpot({ name, email, phone, message, source }) {
           Authorization: `Bearer ${HUBSPOT_TOKEN}`,
           "Content-Type": "application/json",
         },
-        timeout: 10000,
       },
     );
 
-    console.log("✅ HubSpot contact saved:", res.data.id);
+    console.log("HubSpot saved");
   } catch (err) {
-    console.error(
-      "❌ HubSpot ERROR:",
-      err.response?.status,
-      JSON.stringify(err.response?.data, null, 2),
-    );
+    console.error("HubSpot error:", err.response?.data || err.message);
   }
 }
 
 /* =========================
-   DETECT SOURCE
-========================= */
-
-function detectSource(origin) {
-  if (!origin) return "unknown";
-
-  if (origin.includes("re-silk")) {
-    return "re-silk";
-  }
-
-  if (origin.includes("duty-to-beauty")) {
-    return "duty-to-beauty";
-  }
-
-  if (origin.includes("blck")) {
-    return "BLCK";
-  }
-
-  return "unknown";
-}
-
-/* =========================
-   LEAD ENDPOINT
+   LEAD
 ========================= */
 
 app.post("/api/lead", (req, res) => {
@@ -153,10 +133,9 @@ app.post("/api/lead", (req, res) => {
     return res.status(400).json({ ok: false });
   }
 
-  const origin = req.headers.origin || "";
-  const source = detectSource(origin);
+  const source = detectSource(req);
 
-  console.log("📩 Lead:", phone, "| source:", source);
+  console.log("Lead:", phone, "source:", source);
 
   res.json({ ok: true });
 
@@ -171,5 +150,5 @@ app.post("/api/lead", (req, res) => {
 const PORT = process.env.PORT || 5050;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on ${PORT}`);
+  console.log("Server running on", PORT);
 });
