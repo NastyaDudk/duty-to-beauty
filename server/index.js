@@ -50,6 +50,7 @@ async function sendToTelegram({ name, email, phone, message, source }) {
       chat_id: TG_CHAT_ID,
       text:
         `🧾 New lead\n` +
+        `📍 Source: ${source}\n` +
         `👤 Name: ${name}\n` +
         (email ? `📧 Email: ${email}\n` : "") +
         `📞 Phone: ${phone}\n` +
@@ -89,7 +90,7 @@ async function sendToHubSpot({ name, email, phone, message, source }) {
           phone,
           lifecyclestage: "lead",
           message: message || "",
-          // ❗ НЕ используем lead_source — его нет в HubSpot по умолчанию
+          source_custom: source,
         },
       },
       {
