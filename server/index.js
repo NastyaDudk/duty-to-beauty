@@ -97,18 +97,24 @@ async function sendToHubSpot(name, email, phone, message) {
 ========================= */
 
 app.post("/api/lead", (req, res) => {
-  const { name, email = "", phone, message = "" } = req.body || {};
+  const {
+    name,
+    email = "",
+    phone,
+    message = "",
+    source = "unknown",
+  } = req.body || {};
 
   if (!name || !phone) {
     return res.status(400).json({ ok: false });
   }
 
-  console.log("NEW RE-SILK LEAD:", phone);
+  console.log("📩 Lead:", phone, "| source:", source);
 
   res.json({ ok: true });
 
-  sendToTelegram(name, email, phone, message);
-  sendToHubSpot(name, email, phone, message);
+  sendToTelegram({ name, email, phone, message, source });
+  sendToHubSpot({ name, email, phone, message, source });
 });
 
 /* =========================
