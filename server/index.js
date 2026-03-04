@@ -7,6 +7,7 @@ const app = express();
 /* =========================
    MIDDLEWARE
 ========================= */
+
 app.use(express.json());
 
 app.use(
@@ -22,8 +23,9 @@ app.use(
 );
 
 /* =========================
-   ENV (Render / .env)
+   ENV
 ========================= */
+
 const TG_TOKEN = process.env.TG_BOT_TOKEN;
 const TG_CHAT_ID = process.env.TG_CHAT_ID;
 const HUBSPOT_TOKEN = process.env.HUBSPOT_TOKEN;
@@ -31,13 +33,15 @@ const HUBSPOT_TOKEN = process.env.HUBSPOT_TOKEN;
 /* =========================
    HEALTH
 ========================= */
+
 app.get("/", (_, res) => res.send("✅ API running"));
 app.get("/api/test", (_, res) => res.json({ ok: true }));
 
 /* =========================
    TELEGRAM
 ========================= */
-async function sendToTelegram({ name, email, phone, message }) {
+
+async function sendToTelegram({ name, email, phone, message, source }) {
   if (!TG_TOKEN || !TG_CHAT_ID) {
     console.error("❌ Telegram ENV missing");
     return;
@@ -50,7 +54,7 @@ async function sendToTelegram({ name, email, phone, message }) {
         chat_id: TG_CHAT_ID,
         text:
           `🧾 New lead\n` +
-          `📍 Source: re-silk\n` +
+          `📍 Source: ${source}\n` +
           `👤 Name: ${name}\n` +
           (email ? `📧 Email: ${email}\n` : "") +
           `📞 Phone: ${phone}\n` +
@@ -68,7 +72,8 @@ async function sendToTelegram({ name, email, phone, message }) {
 /* =========================
    HUBSPOT
 ========================= */
-async function sendToHubSpot({ name, email, phone, message }) {
+
+async function sendToHubSpot({ name, email, phone, message, source }) {
   if (!HUBSPOT_TOKEN) {
     console.error("❌ HUBSPOT_TOKEN missing");
     return;
@@ -93,7 +98,7 @@ async function sendToHubSpot({ name, email, phone, message }) {
           phone,
           lifecyclestage: "lead",
           message: message || "",
-          source_custom: "re-silk",
+          source_custom: source,
         },
       },
       {
@@ -116,28 +121,53 @@ async function sendToHubSpot({ name, email, phone, message }) {
 }
 
 /* =========================
+   DETECT SOURCE
+========================= */
+
+function detectSource(origin) {
+  if (!origin) return "unknown";
+
+  if (origin.includes("re-silk")) {
+    return "re-silk";
+  }
+
+  if (origin.includes("duty-to-beauty")) {
+    return "duty-to-beauty";
+  }
+
+  if (origin.includes("blck")) {
+    return "BLCK";
+  }
+
+  return "unknown";
+}
+
+/* =========================
    LEAD ENDPOINT
 ========================= */
+
 app.post("/api/lead", (req, res) => {
   const { name, email = "", phone, message = "" } = req.body || {};
-
-  console.log("📩 Lead received:", phone);
 
   if (!name || !phone) {
     return res.status(400).json({ ok: false });
   }
 
-  // быстрый ответ фронту
+  const origin = req.headers.origin || "";
+  const source = detectSource(origin);
+
+  console.log("📩 Lead:", phone, "| source:", source);
+
   res.json({ ok: true });
 
-  // отправка в фоне
-  sendToTelegram({ name, email, phone, message });
-  sendToHubSpot({ name, email, phone, message });
+  sendToTelegram({ name, email, phone, message, source });
+  sendToHubSpot({ name, email, phone, message, source });
 });
 
 /* =========================
    START
 ========================= */
+
 const PORT = process.env.PORT || 5050;
 
 app.listen(PORT, () => {
